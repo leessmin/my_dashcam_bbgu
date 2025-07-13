@@ -1,0 +1,14 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+abstract final class Routes {
+  static const home = "/";
+  static const setting = "/setting";
+  static const permissions = "/permissions";
+  static const video = "/video";
+
+  /// go video
+  /// [dirName] 存储视频的目录名字
+  static void pushVideoRoute(BuildContext context, {required String dirName}) =>
+      context.push("${Routes.video}/$dirName");
+}
