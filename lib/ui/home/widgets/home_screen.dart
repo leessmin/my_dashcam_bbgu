@@ -42,40 +42,27 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: widget.viewModel.getCameraOption(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+    return Scaffold(
+      appBar: _homeAppBar(context, title: "我的记录仪"),
+      body: ListenableBuilder(
+        listenable: Listenable.merge([widget.viewModel]),
+        builder: (context, _) {
+          final videoDirs = widget.viewModel.videoDirs;
+          return DirList(
+            dirList: videoDirs,
+            scrollController: _scrollController,
+            onDeleteVideoDir: (String dirPath) =>
+                widget.viewModel.deleteVideoDir(dirPath),
           );
-        }
-
-        final options = snapshot.data!;
-
-        return Scaffold(
-          appBar: _homeAppBar(context, title: "我的记录仪"),
-          body: ListenableBuilder(
-            listenable: Listenable.merge([widget.viewModel]),
-            builder: (context, _) {
-              final videoDirs = widget.viewModel.videoDirs;
-              return DirList(
-                dirList: videoDirs,
-                scrollController: _scrollController,
-                onDeleteVideoDir: (String dirPath) =>
-                    widget.viewModel.deleteVideoDir(dirPath),
-              );
-            },
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              await launchCameraActivity(options);
-            },
-            tooltip: "启动记录仪",
-            child: Icon(Icons.launch),
-          ),
-        );
-      },
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await launchCameraActivity(await widget.viewModel.getCameraOption());
+        },
+        tooltip: "启动记录仪",
+        child: Icon(Icons.launch),
+      ),
     );
   }
 
