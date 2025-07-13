@@ -43,7 +43,7 @@ class RecordWorker(
      * 启动工作
      * [getInputData] => interval of [Int] 录制间隔时间 默认为3,单位minutes
      */
-    @RequiresApi(Build.VERSION_CODES.R)
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         val interval = inputData.getInt("interval", 3)
 
@@ -51,9 +51,10 @@ class RecordWorker(
 
         // 开始录制的时间
         val nowRecord = System.currentTimeMillis().toString()
+        // TODO: 记录GPS位置
         try {
             while (true) {
-                Log.i(TAG, "循环录制了")
+                Log.i(TAG, "循环录制了!")
                 cameraController.startRecorder(applicationContext, nowRecord)
                 delay(interval.minutes)
                 cameraController.stopRecorder()
@@ -65,6 +66,8 @@ class RecordWorker(
             Log.e(TAG, "录制失败: ${e.message}", e)
             cameraController.stopRecorder()
             Result.failure()
+        } finally {
+            Log.i(TAG, "录制完成!!!!!!!")
         }
         Result.success()
     }

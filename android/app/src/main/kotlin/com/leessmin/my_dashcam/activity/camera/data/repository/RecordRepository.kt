@@ -1,7 +1,6 @@
 package com.leessmin.my_dashcam.activity.camera.data.repository
 
 import android.content.Context
-import androidx.lifecycle.LifecycleOwner
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
