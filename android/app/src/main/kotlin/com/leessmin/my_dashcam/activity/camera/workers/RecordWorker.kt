@@ -9,6 +9,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import com.leessmin.my_dashcam.activity.camera.data.controller.CameraController
+import com.leessmin.my_dashcam.activity.camera.utils.GPSUtils
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -52,6 +53,10 @@ class RecordWorker(
         // 开始录制的时间
         val nowRecord = System.currentTimeMillis().toString()
         // TODO: 记录GPS位置
+
+        // 记录gps数据
+        val gpsUtils = GPSUtils("$nowRecord.txt", applicationContext)
+        gpsUtils.startLocation()
         try {
             while (true) {
                 Log.i(TAG, "循环录制了!")
@@ -68,6 +73,7 @@ class RecordWorker(
             Result.failure()
         } finally {
             Log.i(TAG, "录制完成!!!!!!!")
+            gpsUtils.stopLocation()
         }
         Result.success()
     }

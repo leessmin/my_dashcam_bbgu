@@ -14,6 +14,7 @@ accompanist = "0.37.3"
 lifecycleViewmodelCompose = "2.8.7"
 workRuntimeKtx = "2.10.1"
 lifecycleService = "2.9.0"
+playServicesLocation = "21.3.0"
 
 [libraries]
 androidx-camera-effects = { module = "androidx.camera:camera-effects", version.ref = "cameraEffects" }
@@ -45,6 +46,7 @@ androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-ru
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx" }
 androidx-lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycleService" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
