@@ -52,7 +52,6 @@ class RecordWorker(
 
         // 开始录制的时间
         val nowRecord = System.currentTimeMillis().toString()
-        // TODO: 记录GPS位置
 
         // 记录gps数据
         val gpsUtils = GPSUtils("$nowRecord.txt", applicationContext)
