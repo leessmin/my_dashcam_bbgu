@@ -6,6 +6,7 @@ abstract final class Routes {
   static const setting = "/setting";
   static const permissions = "/permissions";
   static const video = "/video";
+  static const Login = "/login";
 
   /// go video
   /// [dirName] 存储视频的目录名字
