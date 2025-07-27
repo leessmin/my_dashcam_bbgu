@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_dashcam/routing/router.dart';
 import 'package:my_dashcam/ui/core/themes/catppuccin.dart';

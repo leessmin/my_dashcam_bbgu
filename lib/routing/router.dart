@@ -12,7 +12,6 @@ import 'package:my_dashcam/ui/setting/view_models/setting_viewmodel.dart';
 import 'package:my_dashcam/ui/setting/widgets/setting_screen.dart';
 import 'package:my_dashcam/ui/video/view_models/video_viewmodel.dart';
 import 'package:my_dashcam/ui/video/widgets/video_screen.dart';
-import 'package:path/path.dart';
 
 GoRouter router(WidgetRef ref) {
   final provider = ref.read(myDashCamProvider);
