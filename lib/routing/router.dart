@@ -8,6 +8,7 @@ import 'package:my_dashcam/ui/home/widgets/home_screen.dart';
 import 'package:my_dashcam/ui/login/widgets/login_screen.dart';
 import 'package:my_dashcam/ui/permissions/view_models/permissions_viewmodel.dart';
 import 'package:my_dashcam/ui/permissions/widgets/permissions_screen.dart';
+import 'package:my_dashcam/ui/register/widgets/register_screen.dart';
 import 'package:my_dashcam/ui/setting/view_models/setting_viewmodel.dart';
 import 'package:my_dashcam/ui/setting/widgets/setting_screen.dart';
 import 'package:my_dashcam/ui/video/view_models/video_viewmodel.dart';
@@ -31,11 +32,12 @@ GoRouter router(WidgetRef ref) {
     redirect: (context, state) async {
       debugPrint("state.path: ${state.fullPath}");
       final userSessionRepository = provider.userSessionRepository();
-      if(![Routes.Login].contains(state.fullPath)){
+      if (![Routes.login, Routes.register].contains(state.fullPath)) {
         // 需要登陆才能使用的页面
-        if((await userSessionRepository.getToken()).isEmpty || !(await userSessionRepository.getSkipLogin())){
+        if ((await userSessionRepository.getToken()).isEmpty ||
+            !(await userSessionRepository.getSkipLogin())) {
           // 没有登陆/跳过登陆
-          return Routes.Login;
+          return Routes.login;
         }
       }
 
@@ -82,9 +84,10 @@ GoRouter router(WidgetRef ref) {
           );
         },
       ),
+      GoRoute(path: Routes.login, builder: (context, state) => LoginScreen()),
       GoRoute(
-          path: Routes.Login,
-          builder: (context, state) => LoginScreen()
+        path: Routes.register,
+        builder: (context, state) => RegisterScreen(),
       ),
     ],
   );

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:my_dashcam/routing/routes.dart';
 import 'package:my_dashcam/ui/core/themes/catppuccin.dart';
-import 'package:my_dashcam/ui/login/widgets/email_code_input.dart';
-import 'package:my_dashcam/ui/login/widgets/password_input.dart';
+import 'package:my_dashcam/ui/core/ui/email_code_input.dart';
+import 'package:my_dashcam/ui/core/ui/password_input.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -80,7 +82,10 @@ class _LoginScreenState extends State<LoginScreen>
                           child: TabBarView(
                             controller: _tabController,
                             physics: NeverScrollableScrollPhysics(), // 禁止拖动
-                            children: [_passwordLogin(), _emailLogin()],
+                            children: [
+                              _passwordLogin(context),
+                              _emailLogin(context),
+                            ],
                           ),
                         ),
                       ],
@@ -115,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   // 密码登陆
-  Widget _passwordLogin() {
+  Widget _passwordLogin(BuildContext context) {
     return Column(
       children: [
         SizedBox(height: 10),
@@ -128,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen>
         ),
         SizedBox(height: 20),
         PasswordInput(),
-        _registerButon(),
+        _registerButon(context),
         SizedBox(height: 20),
         Center(
           child: InkWell(
@@ -160,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   // 邮箱登陆
-  Widget _emailLogin() {
+  Widget _emailLogin(BuildContext context) {
     return Column(
       children: [
         SizedBox(height: 10),
@@ -174,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen>
         SizedBox(height: 20),
         EmailCodeInput(),
         SizedBox(height: 20),
-        _registerButon(),
+        _registerButon(context),
         SizedBox(height: 20),
         Center(
           child: InkWell(
@@ -206,13 +211,13 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   // 注册按钮
-  Widget _registerButon() {
+  Widget _registerButon(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         TextButton(
           onPressed: () {
-            debugPrint("点击了注册");
+            context.push(Routes.register);
           },
           child: Text(
             "还没有账号?注册一个",

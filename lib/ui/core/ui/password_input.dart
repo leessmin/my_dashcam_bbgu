@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class PasswordInput extends StatefulWidget {
-  const PasswordInput({super.key});
+  const PasswordInput({super.key, this.labelText = "密码"});
+
+  final String labelText;
 
   @override
   State<PasswordInput> createState() => _PasswordInputState();
@@ -17,7 +19,7 @@ class _PasswordInputState extends State<PasswordInput> {
       keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(
         border: OutlineInputBorder(),
-        labelText: "密码",
+        labelText: widget.labelText,
         suffixIcon: IconButton(
           onPressed: () {
             setState(() {
