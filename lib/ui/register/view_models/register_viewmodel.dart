@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_dashcam/data/repositories/loginRegisterRepository/login_register_repository.dart';
-import 'package:my_dashcam/data/repositories/loginRegisterRepository/models/request.dart';
+import 'package:my_dashcam/data/repositories/loginRegister/login_register_repository.dart';
+import 'package:my_dashcam/data/repositories/loginRegister/models/request.dart';
 import 'package:my_dashcam/routing/routes.dart';
 import 'package:toastification/toastification.dart';
 

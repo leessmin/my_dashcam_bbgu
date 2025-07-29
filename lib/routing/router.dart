@@ -36,7 +36,7 @@ GoRouter router(WidgetRef ref) {
       final userSessionRepository = provider.userSessionRepository();
       if (![Routes.login, Routes.register].contains(state.fullPath)) {
         // 需要登陆才能使用的页面
-        if ((await userSessionRepository.getToken()).isEmpty ||
+        if ((await userSessionRepository.getToken()).isEmpty &&
             !(await userSessionRepository.getSkipLogin())) {
           // 没有登陆/跳过登陆
           return Routes.login;
@@ -88,7 +88,12 @@ GoRouter router(WidgetRef ref) {
       ),
       GoRoute(
         path: Routes.login,
-        builder: (context, state) => LoginScreen(viewModel: LoginViewModel()),
+        builder: (context, state) => LoginScreen(
+          viewModel: LoginViewModel(
+            deviceRepository: provider.deviceRepository(),
+            loginRegisterRepository: provider.loginRegisterRepositor(),
+          ),
+        ),
       ),
       GoRoute(
         path: Routes.register,

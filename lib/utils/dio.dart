@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:my_dashcam/configuration/global_configuration.dart';
-import 'package:my_dashcam/data/repositories/userSessionRepository/user_session_repository.dart';
-import 'package:my_dashcam/provider/my_dashcam_provider.dart';
+import 'package:my_dashcam/data/repositories/userSession/user_session_repository.dart';
 import 'package:toastification/toastification.dart';
 
 Dio? _dio;
