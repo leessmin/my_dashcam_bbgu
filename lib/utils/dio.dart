@@ -14,10 +14,15 @@ Dio get fetch {
     _dio?.interceptors.add(
       InterceptorsWrapper(
         onError: (DioException error, ErrorInterceptorHandler handler) {
+          final data = error.response?.data;
+          final msg = data is Map && data['msg'] != null
+              ? data['msg']
+              : "请求出现了错误，请稍后重试";
+
           toastification.show(
             style: ToastificationStyle.fillColored,
             type: ToastificationType.error,
-            title: Text('请求出现了错误，请稍后重试'),
+            title: Text(msg),
             autoCloseDuration: const Duration(seconds: 3),
           );
           return handler.next(error);
