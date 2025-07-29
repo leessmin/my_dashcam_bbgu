@@ -5,9 +5,11 @@ import 'package:my_dashcam/provider/my_dashcam_provider.dart';
 import 'package:my_dashcam/routing/routes.dart';
 import 'package:my_dashcam/ui/home/view_models/home_viewmodel.dart';
 import 'package:my_dashcam/ui/home/widgets/home_screen.dart';
+import 'package:my_dashcam/ui/login/view_models/login_viewmodel.dart';
 import 'package:my_dashcam/ui/login/widgets/login_screen.dart';
 import 'package:my_dashcam/ui/permissions/view_models/permissions_viewmodel.dart';
 import 'package:my_dashcam/ui/permissions/widgets/permissions_screen.dart';
+import 'package:my_dashcam/ui/register/view_models/register_viewmodel.dart';
 import 'package:my_dashcam/ui/register/widgets/register_screen.dart';
 import 'package:my_dashcam/ui/setting/view_models/setting_viewmodel.dart';
 import 'package:my_dashcam/ui/setting/widgets/setting_screen.dart';
@@ -84,10 +86,17 @@ GoRouter router(WidgetRef ref) {
           );
         },
       ),
-      GoRoute(path: Routes.login, builder: (context, state) => LoginScreen()),
+      GoRoute(
+        path: Routes.login,
+        builder: (context, state) => LoginScreen(viewModel: LoginViewModel()),
+      ),
       GoRoute(
         path: Routes.register,
-        builder: (context, state) => RegisterScreen(),
+        builder: (context, state) => RegisterScreen(
+          viewModel: RegisterViewModel(
+            loginRegisterRepository: provider.loginRegisterRepositor(),
+          ),
+        ),
       ),
     ],
   );

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_dashcam/data/repositories/configuration/configuration_repository.dart';
+import 'package:my_dashcam/data/repositories/loginRegisterRepository/login_register_repository.dart';
 import 'package:my_dashcam/data/repositories/permissions/permission_repository.dart';
 import 'package:my_dashcam/data/repositories/userSessionRepository/user_session_repository.dart';
 import 'package:my_dashcam/data/repositories/videoDirctory/video_directory_repository.dart';
@@ -9,6 +10,8 @@ import 'package:my_dashcam/provider/permissions_provider.dart';
 import 'package:my_dashcam/provider/user_session_provider.dart';
 import 'package:my_dashcam/provider/video_directory_provider.dart';
 import 'package:my_dashcam/provider/video_export_provider.dart';
+
+import 'login_register_provider.dart';
 
 final myDashCamProvider = Provider((ref) => MyDashCamProvider(ref));
 
@@ -30,4 +33,7 @@ class MyDashCamProvider {
 
   UserSessionRepository userSessionRepository() =>
       _ref.read(userSessionProvider);
+
+  LoginRegisterRepository loginRegisterRepositor() =>
+      _ref.read(loginRegisterProvider);
 }

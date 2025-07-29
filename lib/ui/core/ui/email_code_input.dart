@@ -1,10 +1,23 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:my_dashcam/data/repositories/emailCode/email_code_repository.dart';
 import 'package:my_dashcam/ui/core/themes/catppuccin.dart';
+import 'package:toastification/toastification.dart';
 
 class EmailCodeInput extends StatefulWidget {
-  const EmailCodeInput({super.key});
+  EmailCodeInput({
+    super.key,
+    required this.controller,
+    required this.validator,
+    required this.getEmail,
+  }) : emailCodeRepository = EmailCodeRepository();
+
+  final TextEditingController controller;
+  final String? Function(String?) validator;
+  final EmailCodeRepository emailCodeRepository;
+  // 获取邮箱函数
+  final String Function() getEmail;
 
   @override
   State<EmailCodeInput> createState() => _EmailCodeInputState();
@@ -16,13 +29,14 @@ class _EmailCodeInputState extends State<EmailCodeInput> {
 
   @override
   void dispose() {
-    super.dispose();
     _timer?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      controller: widget.controller,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         border: OutlineInputBorder(),
@@ -41,7 +55,19 @@ class _EmailCodeInputState extends State<EmailCodeInput> {
             : TextButton(
                 onPressed: () {
                   if (_count == 60) {
-                    debugPrint("TODO:发送验证码请求");
+                    final email = widget.getEmail();
+                    if (email == "" || email.isEmpty || !RegExp(
+                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                    ).hasMatch(email)) {
+                      toastification.show(
+                        context: context,
+                        type: ToastificationType.warning,
+                        title: Text('邮箱不合法'),
+                        autoCloseDuration: const Duration(seconds: 3),
+                      );
+                      return;
+                    }
+                    widget.emailCodeRepository.getEmailCode(email);
                     setState(() {
                       _count--;
                     });
@@ -62,6 +88,7 @@ class _EmailCodeInputState extends State<EmailCodeInput> {
                 ),
               ),
       ),
+      validator: widget.validator,
     );
   }
 }

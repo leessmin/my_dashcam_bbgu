@@ -23,4 +23,7 @@ class GlobalConfiguration {
 
     return videoDir.path;
   }
+
+  // 服务器地址
+  static String get apiUri => "http://100.93.208.87:8080/api";
 }

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_dashcam/routing/router.dart';
 import 'package:my_dashcam/ui/core/themes/catppuccin.dart';
 import 'package:my_dashcam/ui/core/themes/theme.dart';
+import 'package:toastification/toastification.dart';
 
 /*
 测试获取设备信息
@@ -25,11 +26,13 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp.router(
-      theme: catppuccinTheme(getCatppuccin(false)),
-      themeMode: ThemeMode.system,
-      darkTheme: catppuccinTheme(getCatppuccin(true)),
-      routerConfig: router(ref),
+    return ToastificationWrapper(
+      child: MaterialApp.router(
+        theme: catppuccinTheme(getCatppuccin(false)),
+        themeMode: ThemeMode.system,
+        darkTheme: catppuccinTheme(getCatppuccin(true)),
+        routerConfig: router(ref),
+      ),
     );
   }
 }

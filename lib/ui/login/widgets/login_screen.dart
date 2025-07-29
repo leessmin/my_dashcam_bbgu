@@ -4,9 +4,12 @@ import 'package:my_dashcam/routing/routes.dart';
 import 'package:my_dashcam/ui/core/themes/catppuccin.dart';
 import 'package:my_dashcam/ui/core/ui/email_code_input.dart';
 import 'package:my_dashcam/ui/core/ui/password_input.dart';
+import 'package:my_dashcam/ui/login/view_models/login_viewmodel.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({super.key, required this.viewModel});
+
+  final LoginViewModel viewModel;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -14,22 +17,25 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
-  late final TabController _tabController;
+
+  late TabController _tabController;
 
   @override
   void initState() {
-    super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _tabController.dispose();
+    widget.viewModel.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       resizeToAvoidBottomInset: false, // 禁止键盘挤压布局
       body: Column(
@@ -121,63 +127,112 @@ class _LoginScreenState extends State<LoginScreen>
 
   // 密码登陆
   Widget _passwordLogin(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: 10),
-        TextField(
-          keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: "邮箱",
-          ),
-        ),
-        SizedBox(height: 20),
-        PasswordInput(),
-        _registerButon(context),
-        SizedBox(height: 20),
-        Center(
-          child: InkWell(
-            onTap: () {
-              debugPrint("点击了登陆");
+    final viewModel = widget.viewModel;
+
+    return Form(
+      key: viewModel.pwdFormKey,
+      child: Column(
+        children: [
+          SizedBox(height: 10),
+          TextFormField(
+            controller: viewModel.emailController,
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: "邮箱",
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return '请输入邮箱地址';
+              }
+              if (!RegExp(
+                r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+              ).hasMatch(value)) {
+                return '请输入有效的邮箱地址';
+              }
+              return null;
             },
-            borderRadius: BorderRadius.circular(50),
-            child: Ink(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                color: getCatppuccinByCtx(context).lavender,
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Text(
-                  "登陆",
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 25,
+          ),
+          SizedBox(height: 20),
+          PasswordInput(
+            controller: viewModel.passwordController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "请输入密码";
+              }
+              if (value.length < 6) {
+                return "密码长度不能小于6位";
+              }
+              return null;
+            },
+          ),
+          _registerButon(context),
+          SizedBox(height: 20),
+          Center(
+            child: InkWell(
+              onTap: () {
+                debugPrint("点击了登陆");
+              },
+              borderRadius: BorderRadius.circular(50),
+              child: Ink(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: getCatppuccinByCtx(context).lavender,
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    "登陆",
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 25,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   // 邮箱登陆
   Widget _emailLogin(BuildContext context) {
+    final viewModel = widget.viewModel;
+
     return Column(
       children: [
         SizedBox(height: 10),
-        TextField(
+        TextFormField(
+          controller: viewModel.emailController,
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             border: OutlineInputBorder(),
             labelText: "邮箱",
           ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '请输入邮箱地址';
+            }
+            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+              return '请输入有效的邮箱地址';
+            }
+            return null;
+          },
         ),
         SizedBox(height: 20),
-        EmailCodeInput(),
+        EmailCodeInput(
+          controller: viewModel.emailCodeController,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "请输入邮箱验证码";
+            }
+            return null;
+          },
+          getEmail: () => viewModel.emailController.text,
+        ),
         SizedBox(height: 20),
         _registerButon(context),
         SizedBox(height: 20),
