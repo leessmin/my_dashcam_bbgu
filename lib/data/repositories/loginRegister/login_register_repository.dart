@@ -59,6 +59,11 @@ class LoginRegisterRepository {
     return result;
   }
 
+  // 跳过登陆
+  void skipLogin(){
+    _userSessionRepository.setSkipLoginKey(true);
+  }
+
   // 储存用户会话信息
   void _storeUserSession(Response<LoginResponse> result) {
     if (result.code != 200) {

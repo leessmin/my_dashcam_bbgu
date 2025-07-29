@@ -78,6 +78,12 @@ class LoginViewModel extends ChangeNotifier {
     }
   }
 
+  /// 跳过登陆
+  void skipLogin(BuildContext context) {
+    loginRegisterRepository.skipLogin();
+    context.push(Routes.home);
+  }
+
   @override
   void dispose() {
     emailController.dispose();

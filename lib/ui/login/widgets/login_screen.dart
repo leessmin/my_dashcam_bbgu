@@ -34,8 +34,6 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = widget.viewModel;
-
     return Scaffold(
       resizeToAvoidBottomInset: false, // 禁止键盘挤压布局
       body: Column(
@@ -104,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen>
                       children: [
                         TextButton(
                           onPressed: () {
-                            debugPrint("点击了注册");
+                            widget.viewModel.skipLogin(context);
                           },
                           child: Text(
                             "什么?不想注册?那就匿名使用叭",
