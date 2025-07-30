@@ -44,25 +44,27 @@ class _UserScreenState extends State<UserScreen> {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Divider(),
-                    Expanded(
-                      child: uiState.devices.isEmpty
-                          ? Center(child: Text("没有登陆,无法显示设备"))
-                          : GridView.count(
-                              crossAxisCount: 2,
-                              padding: EdgeInsets.all(10),
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                              children: uiState.devices
-                                  .map(
-                                    (device) => _deviceCard(
-                                      deviceName: device.model,
-                                      version: device.versionRelease,
-                                      display: device.display,
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
-                    ),
+                    uiState.loading
+                        ? Expanded(child: Center(child: CircularProgressIndicator()))
+                        : Expanded(
+                            child: uiState.devices.isEmpty
+                                ? Center(child: Text("没有登陆,无法显示设备"))
+                                : GridView.count(
+                                    crossAxisCount: 2,
+                                    padding: EdgeInsets.all(10),
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 10,
+                                    children: uiState.devices
+                                        .map(
+                                          (device) => _deviceCard(
+                                            deviceName: device.model,
+                                            version: device.versionRelease,
+                                            display: device.display,
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                          ),
                   ],
                 ),
               ),
