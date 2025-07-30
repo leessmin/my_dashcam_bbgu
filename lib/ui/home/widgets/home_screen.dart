@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_dashcam/data/repositories/userSession/user_session_repository.dart';
 import 'package:my_dashcam/routing/routes.dart';
 import 'package:my_dashcam/ui/core/ui/side_sheet.dart';
 import 'package:my_dashcam/ui/home/view_models/home_viewmodel.dart';
-import 'package:my_dashcam/ui/home/widgets/dir_list.dart';
+import 'package:my_dashcam/ui/home/view_models/user_viewmodel.dart';
+import 'package:my_dashcam/ui/home/view_models/video_list_viewmodel.dart';
+import 'package:my_dashcam/ui/home/widgets/user_screen.dart';
+import 'package:my_dashcam/ui/home/widgets/video_list_screen.dart';
 import 'package:my_dashcam/utils/platform_method.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,46 +19,42 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
-  final ScrollController _scrollController = ScrollController();
+class _HomeScreenState extends State<HomeScreen> {
+  int currentPageIndex = 0;
+  late PageController _pageViewController;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    _pageViewController = PageController();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    _scrollController.dispose();
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    // 从录制页面返回时
-    if (state == AppLifecycleState.resumed) {
-      widget.viewModel.getVideoDir();
-      _scrollController.jumpTo(0);
-    }
+    _pageViewController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _homeAppBar(context, title: "我的记录仪"),
-      body: ListenableBuilder(
-        listenable: Listenable.merge([widget.viewModel]),
-        builder: (context, _) {
-          final videoDirs = widget.viewModel.videoDirs;
-          return DirList(
-            dirList: videoDirs,
-            scrollController: _scrollController,
-            onDeleteVideoDir: (String dirPath) =>
-                widget.viewModel.deleteVideoDir(dirPath),
-          );
-        },
+      body: PageView(
+        controller: _pageViewController,
+        physics: NeverScrollableScrollPhysics(),
+        children: [
+          VideoListScreen(
+            viewModel: VideoListViewModel(
+              videoDirectoryRepository:
+                  widget.viewModel.videoDirectoryRepository,
+            ),
+          ),
+          UserScreen(
+            viewModel: UserViewModel(
+              userSessionRepository: UserSessionRepository(),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -62,6 +62,23 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         },
         tooltip: "启动记录仪",
         child: Icon(Icons.camera),
+      ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: currentPageIndex,
+        onDestinationSelected: (int index) {
+          _pageViewController.animateToPage(
+            index,
+            duration: Duration(milliseconds: 400),
+            curve: Curves.easeInOut,
+          );
+          setState(() {
+            currentPageIndex = index;
+          });
+        },
+        destinations: [
+          NavigationDestination(icon: Icon(Icons.home), label: "首页"),
+          NavigationDestination(icon: Icon(Icons.account_circle), label: "瓦哒西"),
+        ],
       ),
     );
   }

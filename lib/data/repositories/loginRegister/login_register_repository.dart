@@ -61,7 +61,7 @@ class LoginRegisterRepository {
 
   // 跳过登陆
   void skipLogin(){
-    _userSessionRepository.setSkipLoginKey(true);
+    _userSessionRepository.setSkipLogin(true);
   }
 
   // 储存用户会话信息

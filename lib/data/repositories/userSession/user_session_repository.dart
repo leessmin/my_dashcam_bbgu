@@ -19,17 +19,27 @@ class UserSessionRepository {
     return (await _prefs.getBool(_skipLoginKey)) ?? false;
   }
 
-  void setSkipLoginKey(bool val) => _prefs.setBool(_skipLoginKey, val);
+  void setSkipLogin(bool val) => _prefs.setBool(_skipLoginKey, val);
 
   Future<String> getUsername() async {
-    return (await _prefs.getString(_usernameKey)) ?? "";
+    return (await _prefs.getString(_usernameKey)) ?? "未登陆";
   }
 
   void setUsername(String val) => _prefs.setString(_usernameKey, val);
 
   Future<String> getEmail() async {
-    return (await _prefs.getString(_emailKey)) ?? "";
+    return (await _prefs.getString(_emailKey)) ?? "---";
   }
 
   void setEmail(String val) => _prefs.setString(_emailKey, val);
+
+  // 清除用户数据
+  Future<void> cleanUserSession() async {
+    await Future.wait([
+      _prefs.remove(_skipLoginKey),
+      _prefs.remove(_usernameKey),
+      _prefs.remove(_emailKey),
+      _prefs.remove(_tokenKey),
+    ]);
+  }
 }
