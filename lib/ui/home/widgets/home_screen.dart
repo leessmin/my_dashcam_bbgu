@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           await launchCameraActivity(await widget.viewModel.getCameraOption());
         },
         tooltip: "启动记录仪",
-        child: Icon(Icons.launch),
+        child: Icon(Icons.camera),
       ),
     );
   }
