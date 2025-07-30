@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_dashcam/data/models/video_directory.dart';
 import 'package:my_dashcam/data/repositories/configuration/configuration_repository.dart';
 import 'package:my_dashcam/data/repositories/permissions/permission_repository.dart';
 import 'package:my_dashcam/data/repositories/videoDirctory/video_directory_repository.dart';

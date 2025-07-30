@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_dashcam/data/repositories/device/device_repository.dart';
 import 'package:my_dashcam/data/repositories/userSession/user_session_repository.dart';
 import 'package:my_dashcam/routing/routes.dart';
 import 'package:my_dashcam/ui/core/ui/side_sheet.dart';
@@ -52,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
           UserScreen(
             viewModel: UserViewModel(
               userSessionRepository: UserSessionRepository(),
+              deviceRepository: DeviceRepository(),
             ),
           ),
         ],

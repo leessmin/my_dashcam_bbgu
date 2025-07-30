@@ -45,15 +45,23 @@ class _UserScreenState extends State<UserScreen> {
                     ),
                     Divider(),
                     Expanded(
-                      child: GridView.count(
-                        crossAxisCount: 2,
-                        padding: EdgeInsets.all(10),
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        children: [
-                          _deviceCard(deviceName: 'Redmi K30', version: '15', display: 'bliss_phoenix-userdebug 15 AP3A.241105.008 111'),
-                        ],
-                      ),
+                      child: uiState.devices.isEmpty
+                          ? Center(child: Text("没有登陆,无法显示设备"))
+                          : GridView.count(
+                              crossAxisCount: 2,
+                              padding: EdgeInsets.all(10),
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              children: uiState.devices
+                                  .map(
+                                    (device) => _deviceCard(
+                                      deviceName: device.model,
+                                      version: device.versionRelease,
+                                      display: device.display,
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
                     ),
                   ],
                 ),

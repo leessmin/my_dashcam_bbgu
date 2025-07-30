@@ -19,4 +19,8 @@ class Response<T> {
   Map<String, Object?> toMap() {
     return {'code': code, 'msg': msg, 'data': data};
   }
+
+  factory Response.defaultResponse(T data) {
+    return Response(code: 400, msg: "", data: data);
+  }
 }

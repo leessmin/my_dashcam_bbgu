@@ -36,13 +36,23 @@ Dio get fetch {
 Dio? _authDio;
 
 // 需要权限校验
-Dio get authFetch {
+Future<Dio?> get authFetch async {
+  final userSessionRepository = UserSessionRepository();
+  final token = await userSessionRepository.getToken();
+
   if (_authDio == null) {
-    final userSessionRepository = UserSessionRepository();
+    if (token.isEmpty) {
+      return null;
+    }
+
     _authDio = fetch.clone();
-    _authDio?.options.headers = {
-      "Authorization": "Bearer ${userSessionRepository.getToken()}",
-    };
+    _authDio?.options.headers = {"Authorization": "Bearer $token"};
   }
+
+  if(token.isEmpty){
+    _authDio = null;
+    return null;
+  }
+
   return _authDio!;
 }

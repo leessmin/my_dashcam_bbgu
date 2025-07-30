@@ -26,4 +26,20 @@ class DeviceRepository {
       (json) => DeviceRegisterResponse.fromJson(json as Map<String, dynamic>),
     );
   }
+
+  /// 获取用户设备列表
+  Future<Response<List<DeviceResponse>?>?> getDevices() async {
+    try {
+      final response = await (await authFetch)?.get("/device/list");
+
+      return Response.fromJson(
+        response?.data,
+        (json) => List<DeviceResponse>.from(
+          (json as List).map((item) => DeviceResponse.fromJson(item)),
+        ),
+      );
+    } catch (_) {
+      return Response.defaultResponse([]);
+    }
+  }
 }
