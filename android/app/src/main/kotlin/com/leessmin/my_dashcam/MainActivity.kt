@@ -7,6 +7,7 @@ import android.view.WindowManager
 import androidx.core.view.WindowCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.plugins.GeneratedPluginRegistrant
 
 private const val TAG = "MainActivity"
@@ -28,5 +29,8 @@ class MainActivity : FlutterActivity() {
         GeneratedPluginRegistrant.registerWith(flutterEngine)
 
         ChannelMatch.build(this@MainActivity, flutterEngine.dartExecutor.binaryMessenger)
+
+        // 缓存flutter引擎
+        FlutterEngineCache.getInstance().put("flutter_channel", flutterEngine)
     }
 }

@@ -29,6 +29,7 @@ import androidx.camera.video.VideoCapture
 import androidx.camera.video.VideoRecordEvent
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.leessmin.my_dashcam.FlutterChannel
 import com.leessmin.my_dashcam.activity.camera.common.FrameRate
 import com.leessmin.my_dashcam.activity.camera.utils.DrawWatermark
 import com.leessmin.my_dashcam.activity.camera.utils.SpeedTracking
@@ -277,6 +278,7 @@ class CameraController(
 
                     is VideoRecordEvent.Finalize -> {
                         // 录制完成
+                        FlutterChannel.factory().recordedVideo(dir, videoFile.path)
                     }
                 }
             }

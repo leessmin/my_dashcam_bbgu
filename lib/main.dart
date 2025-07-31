@@ -3,9 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_dashcam/routing/router.dart';
 import 'package:my_dashcam/ui/core/themes/catppuccin.dart';
 import 'package:my_dashcam/ui/core/themes/theme.dart';
+import 'package:my_dashcam/utils/platform_channel.dart';
 import 'package:toastification/toastification.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  startFlutterMethodChannel();
   runApp(ProviderScope(child: MyApp()));
 }
 
