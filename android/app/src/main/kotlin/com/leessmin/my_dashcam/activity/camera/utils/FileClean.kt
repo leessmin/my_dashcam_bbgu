@@ -19,7 +19,12 @@ private const val TAG = "FileClean"
  * @param deleteCallback 删除的视频后的回调, 唯一参数,视频路径
  */
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-fun fileClean(path: String, max: Int, deleteCallback: (String) -> Unit) {
+fun fileClean(
+    path: String,
+    max: Int,
+    deleteDirCallback: (String) -> Unit,
+    deleteCallback: (String) -> Unit
+) {
     if (max == 0) return
 
     val mbMax = max * 1024
@@ -42,7 +47,7 @@ fun fileClean(path: String, max: Int, deleteCallback: (String) -> Unit) {
         Log.d(TAG, "删除文件: ${it.absolutePath}")
         deleteCallback(it.absolutePath)
         it.delete()
-        deleteEmptyDirectory(Path.of(it.parent))
+        deleteEmptyDirectory(Path.of(it.parent), deleteDirCallback)
     }
 }
 
@@ -62,11 +67,13 @@ private fun getDirectorySize(dir: File): Float {
 /**
  * 删除空目录
  * @param path 要删除的目录
+ * @param deleteDirCallback 删除目录后的回调
  */
-private fun deleteEmptyDirectory(path: Path) {
+private fun deleteEmptyDirectory(path: Path, deleteDirCallback: (String) -> Unit) {
     if (Files.isDirectory(path) && Files.list(path).count() == 0L) {
         Log.d(TAG, "删除目录: ${path.pathString}")
         Files.delete(path)
+        // 删除目录对应的 地理位置文件
+        deleteDirCallback(path.toString().substringAfterLast("/"));
     }
 }
-

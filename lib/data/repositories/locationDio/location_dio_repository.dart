@@ -1,21 +1,19 @@
 import 'package:dio/dio.dart' hide Response;
+import 'package:flutter/material.dart';
 import 'package:my_dashcam/data/models/response.dart';
 import 'package:my_dashcam/utils/dio.dart';
 
-class VideoDioRepository {
-  // 上传视频
-  Future<Response<String?>> uploadVideo(
-    String dirName,
-    String videoPath,
-  ) async {
+class LocationDioRepository {
+  // 上传地理位置信息
+  Future<Response<String?>> uploadLocation(String filePath) async {
     try {
+      debugPrint("上传location file: $filePath");
       final formData = FormData.fromMap({
-        "dir": dirName,
-        "video": await MultipartFile.fromFile(videoPath),
+        "file": await MultipartFile.fromFile(filePath),
       });
 
       final response = await (await authFetch)?.post(
-        "/video/upload",
+        "/location/upload",
         data: formData,
       );
 

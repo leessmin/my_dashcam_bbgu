@@ -101,11 +101,15 @@ class GPSUtils(private val fileName: String, private val context: Context) {
         }
     }
 
-    /// 停止
-    fun stopLocation() {
+    /**
+     * 停止位置记录
+     * @return 位置信息文件路径
+     */
+    fun stopLocation(): String {
         locationCallback?.let {
             fusedLocationClient.removeLocationUpdates(it)
             locationCallback = null
         }
+        return createLocationFile(context, fileName).absolutePath
     }
 }

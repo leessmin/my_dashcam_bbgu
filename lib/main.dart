@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:my_dashcam/data/repositories/locationDio/location_dio_repository.dart';
 import 'package:my_dashcam/data/repositories/sqliteVideo/sqlite_videos_repository.dart';
 import 'package:my_dashcam/data/repositories/videoDio/video_dio_repository.dart';
 import 'package:my_dashcam/routing/router.dart';
@@ -13,6 +14,7 @@ void main() {
   FlutterChannel(
     sqliteVideosRepository: SqliteVideosRepository(),
     videoDioRepository: VideoDioRepository(),
+    locationDioRepository: LocationDioRepository(),
   ).startFlutterMethodChannel();
   runApp(ProviderScope(child: MyApp()));
 }

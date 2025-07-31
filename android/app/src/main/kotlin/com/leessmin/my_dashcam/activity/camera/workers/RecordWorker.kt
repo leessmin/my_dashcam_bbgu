@@ -8,12 +8,16 @@ import androidx.annotation.RequiresApi
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
+import com.leessmin.my_dashcam.FlutterChannel
 import com.leessmin.my_dashcam.activity.camera.data.controller.CameraController
 import com.leessmin.my_dashcam.activity.camera.utils.GPSUtils
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import kotlin.time.Duration.Companion.minutes
 
 private const val TAG = "RecordWorker"
@@ -72,7 +76,13 @@ class RecordWorker(
             Result.failure()
         } finally {
             Log.i(TAG, "录制完成!!!!!!!")
-            gpsUtils.stopLocation()
+            val filePath = gpsUtils.stopLocation()
+            // 上传行车记录仪文件
+            if (File(filePath).exists()) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    FlutterChannel.factory().uploadLocationFile(filePath)
+                }
+            }
         }
         Result.success()
     }
