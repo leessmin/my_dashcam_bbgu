@@ -22,4 +22,9 @@ class FlutterChannel(engine: FlutterEngine) {
     fun recordedVideo(dirName: String, videoPath: String) {
         channel.invokeMethod("recordedVideo", mapOf("dirName" to dirName, "videoPath" to videoPath))
     }
+
+    // 通知flutter某个视频被删除
+    fun deletedVideo(videoPath: String){
+        channel.invokeMethod("deletedVideo", mapOf("videoPath" to videoPath))
+    }
 }

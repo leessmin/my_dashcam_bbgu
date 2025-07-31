@@ -16,9 +16,10 @@ private const val TAG = "FileClean"
  * 清理某个目录下的文件夹
  * @param path 目录路径
  * @param max 目录最大的空间，超过最大空间则执行清理 单位GB, 如果传入0则代表不执行清理
+ * @param deleteCallback 删除的视频后的回调, 唯一参数,视频路径
  */
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-fun fileClean(path: String, max: Int) {
+fun fileClean(path: String, max: Int, deleteCallback: (String) -> Unit) {
     if (max == 0) return
 
     val mbMax = max * 1024
@@ -39,6 +40,7 @@ fun fileClean(path: String, max: Int) {
             return
         }
         Log.d(TAG, "删除文件: ${it.absolutePath}")
+        deleteCallback(it.absolutePath)
         it.delete()
         deleteEmptyDirectory(Path.of(it.parent))
     }

@@ -23,4 +23,10 @@ class SqliteVideosRepository {
       videoPath,
     ]);
   }
+
+  // 删除视频通过视频路径
+  Future<void> deleteVideo(String videPath) async {
+    final db = await getDB();
+    await db.delete(_table, where: "video_path = ?", whereArgs: [videPath]);
+  }
 }

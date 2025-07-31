@@ -23,6 +23,7 @@ class FlutterChannel {
   void startFlutterMethodChannel() {
     Map<String, Future<String> Function(dynamic)> methods = {
       "recordedVideo": _recordedVideo,
+      "deletedVideo": _deletedVideo,
     };
 
     _flutterMethodChannel.setMethodCallHandler((MethodCall call) async {
@@ -47,6 +48,15 @@ class FlutterChannel {
     if (result.code == 200) {
       _sqliteVideosRepository.updateUpload(args["videoPath"]);
     }
+
+    return "ok";
+  }
+
+  // 删除本地视频
+  Future<String> _deletedVideo(args) async {
+    debugPrint("删除视频路径: ${args['videoPath']}");
+
+    await _sqliteVideosRepository.deleteVideo(args['videoPath']);
 
     return "ok";
   }

@@ -285,7 +285,11 @@ class CameraController(
 
         // 确保存储空间的足够，清理老旧视频
         CoroutineScope(Dispatchers.IO).launch {
-            fileClean(options.videoSavePath, options.maxSaveSize)
+            fileClean(options.videoSavePath, options.maxSaveSize) { path ->
+                CoroutineScope(Dispatchers.Main).launch {
+                    FlutterChannel.factory().deletedVideo(path);
+                }
+            }
         }
     }
 
