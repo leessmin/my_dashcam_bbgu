@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:my_dashcam/data/repositories/device/device_repository.dart';
 import 'package:my_dashcam/data/repositories/device/models/response.dart';
-import 'package:my_dashcam/data/repositories/loginRegister/models/response.dart';
 import 'package:my_dashcam/data/repositories/userSession/user_session_repository.dart';
 
 class UserUiState {
