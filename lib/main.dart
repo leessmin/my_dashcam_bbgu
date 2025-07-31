@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:my_dashcam/data/repositories/sqliteVideo/sqlite_videos_repository.dart';
+import 'package:my_dashcam/data/repositories/videoDio/video_dio_repository.dart';
 import 'package:my_dashcam/routing/router.dart';
 import 'package:my_dashcam/ui/core/themes/catppuccin.dart';
 import 'package:my_dashcam/ui/core/themes/theme.dart';
-import 'package:my_dashcam/utils/platform_channel.dart';
+import 'package:my_dashcam/utils/flutter_channel.dart';
 import 'package:toastification/toastification.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  startFlutterMethodChannel();
+  FlutterChannel(
+    sqliteVideosRepository: SqliteVideosRepository(),
+    videoDioRepository: VideoDioRepository(),
+  ).startFlutterMethodChannel();
   runApp(ProviderScope(child: MyApp()));
 }
 

@@ -20,6 +20,6 @@ class FlutterChannel(engine: FlutterEngine) {
 
     // 上传视频
     fun recordedVideo(dirName: String, videoPath: String) {
-        channel.invokeMethod("recordedVideo", listOf(dirName, videoPath))
+        channel.invokeMethod("recordedVideo", mapOf("dirName" to dirName, "videoPath" to videoPath))
     }
 }
