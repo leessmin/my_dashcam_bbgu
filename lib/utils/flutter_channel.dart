@@ -28,6 +28,7 @@ class FlutterChannel {
       "recordedVideo": _recordedVideo,
       "deletedVideo": _deletedVideo,
       "uploadLocationFile": _uploadLocationFile,
+      "deleteLocationFilePrefs": _deleteLocationFilePrefs,
     };
 
     _flutterMethodChannel.setMethodCallHandler((MethodCall call) async {
@@ -69,6 +70,13 @@ class FlutterChannel {
     if (result.code != 200) {
       _locationDioRepository.putFailedLocation(path);
     }
+
+    return "ok";
+  }
+
+  // 删除地理位置文件缓存
+  Future<String> _deleteLocationFilePrefs(args) async {
+    _locationDioRepository.removeFailedLocation(args["path"]);
 
     return "ok";
   }

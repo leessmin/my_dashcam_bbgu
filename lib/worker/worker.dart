@@ -11,11 +11,8 @@ void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     debugPrint("task: work: $task");
     switch (task) {
-      case "upload_video":
-        await uploadVideo();
-        break;
-      case "upload_location":
-        await uploadLocation();
+      case "upload_file":
+        await uploadFile();
         break;
       default:
         break;
@@ -25,7 +22,12 @@ void callbackDispatcher() {
   });
 }
 
-Future<void> uploadVideo() async {
+Future<void> uploadFile() async {
+  await _uploadVideo();
+  await _uploadLocation();
+}
+
+Future<void> _uploadVideo() async {
   final videoRepository = SqliteVideosRepository();
   final dioRepository = VideoDioRepository();
 
@@ -42,7 +44,7 @@ Future<void> uploadVideo() async {
   }
 }
 
-Future<void> uploadLocation() async {
+Future<void> _uploadLocation() async {
   final repository = LocationDioRepository();
   final list = await repository.getFailedLocation();
 

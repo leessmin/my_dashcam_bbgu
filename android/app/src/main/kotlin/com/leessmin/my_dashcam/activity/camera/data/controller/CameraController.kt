@@ -298,6 +298,7 @@ class CameraController(
                     if (file.exists()) {
                         file.delete();
                     }
+                    FlutterChannel.factory().deleteLocationFile(file.absolutePath)
                 }
             ) { path ->
                 CoroutineScope(Dispatchers.Main).launch {

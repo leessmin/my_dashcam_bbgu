@@ -25,21 +25,13 @@ void boot() async {
     locationDioRepository: LocationDioRepository(),
   ).startFlutterMethodChannel();
 
-  uploadVideo();
-  uploadLocation();
-
   await Workmanager().initialize(callbackDispatcher);
-  // 上传视频文件
+  // 上传文件
   Workmanager().registerPeriodicTask(
-    "upload_video",
-    "upload_video",
-    frequency: Duration(minutes: 15),
-  );
-  // 上传位置文件
-  Workmanager().registerPeriodicTask(
-    "upload_location",
-    "upload_location",
-    frequency: Duration(minutes: 15),
+    "upload_file_1",
+    "upload_file",
+    constraints: Constraints(networkType: NetworkType.connected),
+    frequency: Duration(minutes: 20),
   );
 }
 

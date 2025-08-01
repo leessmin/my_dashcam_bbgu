@@ -32,4 +32,9 @@ class FlutterChannel(engine: FlutterEngine) {
     fun uploadLocationFile(path: String) {
         channel.invokeMethod("uploadLocationFile", mapOf("path" to path))
     }
+
+    // 删除地理位置文件
+    fun deleteLocationFile(path: String) {
+        channel.invokeMethod("deleteLocationFilePrefs", mapOf("path" to path))
+    }
 }
