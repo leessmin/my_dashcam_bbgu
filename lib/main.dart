@@ -8,15 +8,39 @@ import 'package:my_dashcam/ui/core/themes/catppuccin.dart';
 import 'package:my_dashcam/ui/core/themes/theme.dart';
 import 'package:my_dashcam/utils/flutter_channel.dart';
 import 'package:toastification/toastification.dart';
+import 'package:workmanager/workmanager.dart';
+
+import 'worker/worker.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  boot();
+  runApp(ProviderScope(child: MyApp()));
+}
+
+void boot() async {
   FlutterChannel(
     sqliteVideosRepository: SqliteVideosRepository(),
     videoDioRepository: VideoDioRepository(),
     locationDioRepository: LocationDioRepository(),
   ).startFlutterMethodChannel();
-  runApp(ProviderScope(child: MyApp()));
+
+  uploadVideo();
+  uploadLocation();
+
+  await Workmanager().initialize(callbackDispatcher);
+  // 上传视频文件
+  Workmanager().registerPeriodicTask(
+    "upload_video",
+    "upload_video",
+    frequency: Duration(minutes: 15),
+  );
+  // 上传位置文件
+  Workmanager().registerPeriodicTask(
+    "upload_location",
+    "upload_location",
+    frequency: Duration(minutes: 15),
+  );
 }
 
 class MyApp extends ConsumerWidget {

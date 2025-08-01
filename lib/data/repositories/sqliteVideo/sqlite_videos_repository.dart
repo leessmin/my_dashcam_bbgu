@@ -29,4 +29,16 @@ class SqliteVideosRepository {
     final db = await getDB();
     await db.delete(_table, where: "video_path = ?", whereArgs: [videPath]);
   }
+
+  // 获取上传失败的文件列表
+  Future<List<Video>> getUploadFailedVideos() async {
+    final db = await getDB();
+    List<Map<String, dynamic>> maps = await db.query(
+      _table,
+      where: "upload = ?",
+      whereArgs: [0],
+    );
+
+    return maps.map((val) => Video.fromJson(val)).toList();
+  }
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_dashcam/data/repositories/locationDio/location_dio_repository.dart';
 import 'package:my_dashcam/data/repositories/sqliteVideo/models/video.dart';
@@ -64,7 +63,12 @@ class FlutterChannel {
 
   // 上传地理位置
   Future<String> _uploadLocationFile(args) async {
-    _locationDioRepository.uploadLocation(args['path']);
+    final path = args['path'];
+    final result = await _locationDioRepository.uploadLocation(path);
+
+    if (result.code != 200) {
+      _locationDioRepository.putFailedLocation(path);
+    }
 
     return "ok";
   }
