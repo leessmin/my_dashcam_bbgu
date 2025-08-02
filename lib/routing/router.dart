@@ -25,6 +25,7 @@ GoRouter router(WidgetRef ref) {
       configurationRepository: provider.configurationRepository(),
       permissionRepository: provider.permissionRepository(),
       videoDirectoryRepository: provider.videoDirectoryRepository(),
+      videoDioRepository: provider.videoDioRepository(),
     ),
   );
 

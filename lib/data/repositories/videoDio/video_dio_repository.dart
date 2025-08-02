@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart' hide Response;
+import 'package:flutter/cupertino.dart';
 import 'package:my_dashcam/data/models/response.dart';
+import 'package:my_dashcam/data/repositories/videoDio/models/response.dart';
 import 'package:my_dashcam/utils/dio.dart';
 
 class VideoDioRepository {
@@ -21,6 +23,27 @@ class VideoDioRepository {
 
       return Response.fromJson(response?.data, (json) => null);
     } catch (_) {
+      return Response.defaultResponse(null);
+    }
+  }
+
+  // 获取视频目录
+  Future<Response<List<VideoDirResponse>?>> getVideoDir(
+    String? deviceId,
+  ) async {
+    try {
+      final response = await (await authFetch)?.get("/video/video_dir_list");
+
+      return Response.fromJson(
+        response?.data,
+        (json) => List<VideoDirResponse>.from(
+          (json as List).map(
+            (item) => VideoDirResponse.fromJson(item as Map<String, dynamic>),
+          ),
+        ),
+      );
+    } catch (err) {
+      debugPrint("err: $err");
       return Response.defaultResponse(null);
     }
   }

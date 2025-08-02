@@ -48,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
             viewModel: VideoListViewModel(
               videoDirectoryRepository:
                   widget.viewModel.videoDirectoryRepository,
+              videoDioRepository: widget.viewModel.videoDioRepository,
             ),
           ),
           UserScreen(

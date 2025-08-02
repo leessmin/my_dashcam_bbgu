@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_dashcam/data/repositories/configuration/configuration_repository.dart';
 import 'package:my_dashcam/data/repositories/permissions/permission_repository.dart';
+import 'package:my_dashcam/data/repositories/videoDio/video_dio_repository.dart';
 import 'package:my_dashcam/data/repositories/videoDirctory/video_directory_repository.dart';
 import 'package:my_dashcam/domain/models/camera_activity_options.dart';
 
@@ -9,6 +10,7 @@ class HomeViewModel extends ChangeNotifier {
     required this.configurationRepository,
     required this.permissionRepository,
     required this.videoDirectoryRepository,
+    required this.videoDioRepository,
   }) {
     requirePermissionAll();
   }
@@ -16,6 +18,7 @@ class HomeViewModel extends ChangeNotifier {
   final ConfigurationRepository configurationRepository;
   final PermissionRepository permissionRepository;
   final VideoDirectoryRepository videoDirectoryRepository;
+  final VideoDioRepository videoDioRepository;
 
   // 获取所有权限
   Future<void> requirePermissionAll() async {
