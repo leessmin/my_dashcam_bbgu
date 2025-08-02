@@ -23,7 +23,6 @@ class _VideoListScreenState extends State<VideoListScreen>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     WidgetsBinding.instance.addObserver(this);
-    widget.viewModel.getOnlineVideoDir();
   }
 
   @override
@@ -31,6 +30,7 @@ class _VideoListScreenState extends State<VideoListScreen>
     // 从录制页面返回时
     if (state == AppLifecycleState.resumed) {
       widget.viewModel.getVideoDir();
+      widget.viewModel.getOnlineVideoDir();
       _scrollController.jumpTo(0);
     }
   }

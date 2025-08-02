@@ -11,6 +11,7 @@ class VideoListViewModel extends ChangeNotifier {
   }) : _videoDirectoryRepository = videoDirectoryRepository,
        _videoDioRepository = videoDioRepository {
     getVideoDir();
+    getOnlineVideoDir();
   }
 
   final VideoDirectoryRepository _videoDirectoryRepository;
@@ -41,7 +42,6 @@ class VideoListViewModel extends ChangeNotifier {
   // 获取联网的视频目录
   Future<void> getOnlineVideoDir() async {
     final result = (await _videoDioRepository.getVideoDir(null));
-    debugPrint("result: ${result.code}");
     if (result.code == 200) {
       _onlineVideoDirs = result.data!;
     }

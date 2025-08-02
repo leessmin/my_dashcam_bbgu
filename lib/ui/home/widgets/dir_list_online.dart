@@ -35,10 +35,6 @@ class _DirListOnlineState extends State<DirListOnline> {
         itemBuilder: (context, index) {
           final videoDir = widget.dirList[index];
 
-          Uint8List thumbnail = base64.decode(
-            videoDir.firstVideo.videoThumbnail.split(",").last,
-          );
-
           return Card(
             clipBehavior: Clip.hardEdge,
             child: InkWell(
@@ -79,7 +75,11 @@ class _DirListOnlineState extends State<DirListOnline> {
                           ),
                           clipBehavior: Clip.hardEdge,
                           child: Image.memory(
-                            thumbnail,
+                            base64.decode(
+                              videoDir.firstVideo.videoThumbnail
+                                  .split(",")
+                                  .last,
+                            ),
                             fit: BoxFit.cover,
                             height: 72,
                             width: 128,
