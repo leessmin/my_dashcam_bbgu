@@ -31,7 +31,7 @@ void boot() async {
     "upload_file_1",
     "upload_file",
     constraints: Constraints(networkType: NetworkType.connected),
-    frequency: Duration(minutes: 20),
+    frequency: Duration(hours: 12),
   );
 }
 

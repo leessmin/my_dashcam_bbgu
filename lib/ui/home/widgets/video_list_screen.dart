@@ -71,8 +71,8 @@ class _VideoListScreenState extends State<VideoListScreen>
                   DirListOnline(
                     dirList: widget.viewModel.onlineVideoDirs,
                     scrollController: _scrollController,
-                    onDeleteVideoDir: (String dirPath) =>
-                        widget.viewModel.deleteVideoDir(dirPath),
+                    onDeleteVideoDir: (int id) =>
+                        widget.viewModel.deleteOnlineVideoDir(id),
                   ),
                 ],
               ),

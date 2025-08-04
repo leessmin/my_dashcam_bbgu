@@ -47,4 +47,10 @@ class VideoListViewModel extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  // 删除联网的视频目录
+  Future<void> deleteOnlineVideoDir(int videoDirId) async {
+    await _videoDioRepository.deleteVideoDir(videoDirId);
+    getOnlineVideoDir();
+  }
 }

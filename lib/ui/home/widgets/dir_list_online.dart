@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:my_dashcam/data/repositories/videoDio/models/response.dart';
@@ -18,7 +17,7 @@ class DirListOnline extends StatefulWidget {
 
   final List<VideoDirResponse> dirList;
   final ScrollController scrollController;
-  final Future<void> Function(String) onDeleteVideoDir;
+  final Future<void> Function(int) onDeleteVideoDir;
 
   @override
   State<DirListOnline> createState() => _DirListOnlineState();
@@ -104,9 +103,7 @@ class _DirListOnlineState extends State<DirListOnline> {
                                           ),
                                           TextButton(
                                             onPressed: () {
-                                              widget.onDeleteVideoDir(
-                                                videoDir.dirPath,
-                                              );
+                                              widget.onDeleteVideoDir(videoDir.id);
                                               Navigator.of(context).pop();
                                             },
                                             child: Text(

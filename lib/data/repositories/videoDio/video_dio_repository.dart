@@ -32,7 +32,10 @@ class VideoDioRepository {
     String? deviceId,
   ) async {
     try {
-      final response = await (await authFetch)?.get("/video/video_dir_list");
+      final uri = deviceId == null
+          ? "/video/video_dir_list"
+          : "/video/video_dir_list?deviceId=$deviceId";
+      final response = await (await authFetch)?.get(uri);
 
       return Response.fromJson(
         response?.data,
@@ -44,6 +47,19 @@ class VideoDioRepository {
       );
     } catch (err) {
       debugPrint("err: $err");
+      return Response.defaultResponse(null);
+    }
+  }
+
+  // 删除视频目录
+  Future<Response<String?>> deleteVideoDir(int videoDirId) async {
+    try {
+      final response = await (await authFetch)?.delete(
+        "/video/delete_video_dir?video_dir_id=$videoDirId",
+      );
+
+      return Response.fromJson(response?.data, (json) => null);
+    } catch (err) {
       return Response.defaultResponse(null);
     }
   }
