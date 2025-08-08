@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:my_dashcam/data/repositories/videoDio/models/response.dart';
 import 'package:my_dashcam/ui/core/themes/catppuccin.dart';
+import 'package:my_dashcam/ui/core/ui/base64_image.dart';
 import 'package:my_dashcam/utils/timestamp_format.dart';
 import 'package:my_dashcam/utils/video_process.dart';
 import 'package:path/path.dart' as p;
@@ -77,13 +78,10 @@ class VideoList extends StatelessWidget {
                             clipBehavior: Clip.hardEdge,
                             child: Stack(
                               children: [
-                                Image.memory(
-                                  base64.decode(
-                                    videoEntity.videoThumbnail
-                                        .split(",")
-                                        .last,
-                                  ),
-                                  fit: BoxFit.cover,
+                                Base64Image(
+                                  image: videoEntity.videoThumbnail
+                                      .split(",")
+                                      .last,
                                   height: 108 * 0.8,
                                   width: 192 * 0.8,
                                 ),
@@ -92,7 +90,7 @@ class VideoList extends StatelessWidget {
                                   right: 5,
                                   child: Text(
                                     VideoProcess.videoDurationFormat(
-                                      videoEntity.duration*1000,
+                                      videoEntity.duration * 1000,
                                     ).toString().split(".").first,
                                     style: TextStyle(
                                       fontSize: Theme.of(
@@ -114,22 +112,20 @@ class VideoList extends StatelessWidget {
                                   _videoNameFormat(
                                     p.basename(videoEntity.videoPath),
                                   ),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelLarge
+                                  style: Theme.of(context).textTheme.labelLarge
                                       ?.copyWith(
-                                    color: index == currentVideoIdx
-                                        ? getCatppuccinByCtx(
-                                      context,
-                                    ).rosewater
-                                        : null,
-                                  ),
+                                        color: index == currentVideoIdx
+                                            ? getCatppuccinByCtx(
+                                                context,
+                                              ).rosewater
+                                            : null,
+                                      ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 6.0),
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       _infoText(
                                         context,
@@ -161,17 +157,15 @@ class VideoList extends StatelessWidget {
                           alignment: Alignment.centerRight,
                           child: isExportMode
                               ? Checkbox(
-                            checkColor: getCatppuccinByCtx(
-                              context,
-                            ).base,
-                            fillColor: WidgetStatePropertyAll(
-                              getCatppuccinByCtx(context).mauve,
-                            ),
-                            value: exportVideo.contains(index),
-                            onChanged: (bool? value) {
-                              onSwitchExportVideo(index);
-                            },
-                          )
+                                  checkColor: getCatppuccinByCtx(context).base,
+                                  fillColor: WidgetStatePropertyAll(
+                                    getCatppuccinByCtx(context).mauve,
+                                  ),
+                                  value: exportVideo.contains(index),
+                                  onChanged: (bool? value) {
+                                    onSwitchExportVideo(index);
+                                  },
+                                )
                               : SizedBox(),
                         ),
                       ),

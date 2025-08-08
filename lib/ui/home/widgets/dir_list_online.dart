@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:my_dashcam/data/repositories/videoDio/models/response.dart';
 import 'package:my_dashcam/routing/routes.dart';
 import 'package:my_dashcam/ui/core/themes/catppuccin.dart';
+import 'package:my_dashcam/ui/core/ui/base64_image.dart';
 import 'package:my_dashcam/utils/timestamp_format.dart';
-import 'package:path/path.dart' as p;
 
 class DirListOnline extends StatefulWidget {
   const DirListOnline({
@@ -77,13 +77,10 @@ class _DirListOnlineState extends State<DirListOnline> {
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),
                                 clipBehavior: Clip.hardEdge,
-                                child: Image.memory(
-                                  base64.decode(
-                                    videoDir.firstVideo.videoThumbnail
-                                        .split(",")
-                                        .last,
-                                  ),
-                                  fit: BoxFit.cover,
+                                child: Base64Image(
+                                  image: videoDir.firstVideo.videoThumbnail
+                                      .split(",")
+                                      .last,
                                   height: 72,
                                   width: 128,
                                 ),
