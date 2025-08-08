@@ -1,4 +1,3 @@
-
 import 'package:chewie/chewie.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -127,19 +126,19 @@ class OnlineVideoViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 导出的视频列表 存储[_videos]的下表
-  final List<int> _exportVideos = [];
+  /// 导出的视频列表 存储视频的id
+  final List<VideoResponse> _exportVideos = [];
 
-  List<int> get exportVideos => _exportVideos;
+  List<VideoResponse> get exportVideos => _exportVideos;
 
   /// 切换视频是否需要导出
-  /// @params [idx] 需要导出的视频索引
-  /// [idx]存在则删除，不存在则添加
-  void switchExportVideo(int idx) {
-    if (_exportVideos.contains(idx)) {
-      _exportVideos.remove(idx);
+  /// @params [video] 需要导出的视频
+  /// [video]存在则删除，不存在则添加
+  void switchExportVideo(VideoResponse video) {
+    if (_exportVideos.contains(video)) {
+      _exportVideos.remove(video);
     } else {
-      _exportVideos.add(idx);
+      _exportVideos.add(video);
     }
     notifyListeners();
   }
@@ -152,7 +151,7 @@ class OnlineVideoViewModel extends ChangeNotifier {
   }
 
   /// 视频导出进度
-  ValueNotifier<String> get exportProgress => ValueNotifier("10/22");
+   ValueNotifier<String> exportProgress = ValueNotifier("0");
 
   /// 是否导出视频时进行视频合并
   final ValueNotifier<bool> _isMerge = ValueNotifier(false);
@@ -163,25 +162,25 @@ class OnlineVideoViewModel extends ChangeNotifier {
 
   /// 导出视频
   Future<void> exportVideoHandle() async {
-    List<String> videos = [];
+    // 如果没有选择视频则全部导出
+    final targetVideos = exportVideos.isEmpty ? videos : exportVideos;
+    exportProgress.value = "0";
     try {
-      // if (exportVideos.isEmpty) {
-      //   /// 没有选择视频，则全部导出
-      //   videos = _videos.map((v) => v.path).toList();
-      // } else {
-      //   for (var (idx, video) in _videos.indexed) {
-      //     if (!_exportVideos.contains(idx)) {
-      //       continue;
-      //     }
-      //     videos.add(video.path);
-      //   }
-      // }
-
       if (isMerge.value) {
         // 合并视频并导出
-        // await _videoExportRepository.exportVideosMerge(videos);
+        await _videoDioRepository.downloadConcatVideo(
+          targetVideos.map((item) => item.id).toList(),
+          progressFn: (value){
+            exportProgress.value = value;
+          }
+        );
       } else {
-        // await _videoExportRepository.exportVideosOneByOne(videos);
+        for (final entry in targetVideos.asMap().entries) {
+          final index = entry.key;
+          final video = entry.value;
+          await _videoDioRepository.downloadVideo(video);
+          exportProgress.value = "${(index + 1).toDouble() / targetVideos.length * 100}";
+        }
       }
     } catch (e) {
       debugPrint("exportVideoHandle: 导出出现错误: ${e.toString()}");

@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart' hide Response;
 import 'package:flutter/cupertino.dart';
+import 'package:gallery_saver_plus/gallery_saver.dart';
 import 'package:my_dashcam/data/models/response.dart';
 import 'package:my_dashcam/data/repositories/videoDio/models/response.dart';
 import 'package:my_dashcam/utils/dio.dart';
+import 'package:path_provider/path_provider.dart';
 
 class VideoDioRepository {
   // 上传视频
@@ -98,6 +102,50 @@ class VideoDioRepository {
     } catch (err) {
       return Response.defaultResponse(null);
     }
+  }
+
+  // 下载视频到手机相册
+  Future<void> downloadVideo(VideoResponse video) async {
+    final tempDir = await getTemporaryDirectory();
+    final tempVideoPath = "${tempDir.path}/${video.videoName}";
+
+    await (await authFetch)?.download(
+      "/video/get_video/${video.id}",
+      tempVideoPath,
+    );
+
+    await GallerySaver.saveVideo(tempVideoPath);
+
+    // 删除临时视频文件
+    final tempVideo = File(tempVideoPath);
+    await tempVideo.delete();
+  }
+
+  // 合并视频并下载
+  Future<void> downloadConcatVideo(
+    List<int> ids, {
+    required void Function(String) progressFn,
+  }) async {
+    final tempDir = await getTemporaryDirectory();
+    final tempVideoPath =
+        "${tempDir.path}/${DateTime.now().millisecondsSinceEpoch ~/ 1000}.mp4";
+
+    await (await authFetch)?.download(
+      "/video/concat?${ids.map((id) => "ids=$id").join("&")}",
+      tempVideoPath,
+      onReceiveProgress: (received, total) {
+        if (total != -1) {
+          double progress = received / total * 100;
+          progressFn(progress.toStringAsFixed(2));
+        }
+      },
+    );
+
+    await GallerySaver.saveVideo(tempVideoPath);
+
+    // 删除临时视频文件
+    final tempVideo = File(tempVideoPath);
+    await tempVideo.delete();
   }
 
   // 视频播放地址

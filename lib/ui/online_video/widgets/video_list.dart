@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -35,10 +34,10 @@ class VideoList extends StatelessWidget {
   final void Function() onLongPress;
 
   // 添加导出视频
-  final void Function(int) onSwitchExportVideo;
+  final void Function(VideoResponse) onSwitchExportVideo;
 
   // 需要导出的视频
-  final List<int> exportVideo;
+  final List<VideoResponse> exportVideo;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +55,7 @@ class VideoList extends StatelessWidget {
             onLongPress: onLongPress,
             onTap: () {
               if (isExportMode) {
-                onSwitchExportVideo(index);
+                onSwitchExportVideo(videoEntity);
               } else {
                 tapVideo(index);
               }
@@ -161,9 +160,9 @@ class VideoList extends StatelessWidget {
                                   fillColor: WidgetStatePropertyAll(
                                     getCatppuccinByCtx(context).mauve,
                                   ),
-                                  value: exportVideo.contains(index),
+                                  value: exportVideo.contains(videoEntity),
                                   onChanged: (bool? value) {
-                                    onSwitchExportVideo(index);
+                                    onSwitchExportVideo(videoEntity);
                                   },
                                 )
                               : SizedBox(),
