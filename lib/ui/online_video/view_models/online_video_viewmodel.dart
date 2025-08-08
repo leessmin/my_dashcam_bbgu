@@ -13,10 +13,10 @@ class OnlineVideoViewModel extends ChangeNotifier {
     required VideoDioRepository videoDioRepository,
     required UserSessionRepository userSessionRepository,
     required this.dirId,
+    required this.dirName,
   }) : _videoDioRepository = videoDioRepository,
        _userSessionRepository = userSessionRepository {
     loadVideos();
-    loadDirInfo();
   }
 
   final VideoDioRepository _videoDioRepository;
@@ -25,13 +25,12 @@ class OnlineVideoViewModel extends ChangeNotifier {
   // 目录名字
   final int dirId;
 
+  // 目录名字
+  final String dirName;
+
   List<VideoResponse> _videos = [];
 
   List<VideoResponse> get videos => _videos;
-
-  VideoDirResponse _dirInfo = VideoDirResponse.empty();
-
-  VideoDirResponse get dirInfo => _dirInfo;
 
   // 当前播放的视频索引
   int _currentIndex = 0;
@@ -45,16 +44,6 @@ class OnlineVideoViewModel extends ChangeNotifier {
   VideoPlayerController? _videoPlayerController;
 
   ValueNotifier<ChewieController?> get chewieController => _chewieController;
-
-  // 加载目录信息
-  Future<void> loadDirInfo() async {
-    final result = await _videoDioRepository.videoDirInfo(dirId);
-    if (result.code != 200) {
-      return;
-    }
-    _dirInfo = result.data!;
-    notifyListeners();
-  }
 
   // 加载视频
   Future<void> loadVideos() async {

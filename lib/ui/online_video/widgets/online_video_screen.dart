@@ -112,7 +112,7 @@ class _OnlineVideoScreenState extends State<OnlineVideoScreen> {
     return Scaffold(
       appBar: defaultChildAppBar(
         context,
-        title: TimestampFormat.timestampToTimeString(widget.viewModel.dirInfo.dirName),
+        title: TimestampFormat.timestampToTimeString(widget.viewModel.dirName),
         actions: [
           IconButton(
             onPressed: () => exportVideo(context),

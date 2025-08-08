@@ -107,11 +107,14 @@ GoRouter router(WidgetRef ref) {
         ),
       ),
       GoRoute(
-        path: "${Routes.onlineVideo}/:dirId",
+        path: "${Routes.onlineVideo}/:dirId/:dirName",
         builder: (context, state) {
           final dirId = state.pathParameters["dirId"];
-          if (dirId == null) {
-            return Scaffold(body: Center(child: Text("dirId == null")));
+          final dirName = state.pathParameters["dirName"];
+          if (dirId == null || dirName == null) {
+            return Scaffold(
+              body: Center(child: Text("dirId == null || dirName == null")),
+            );
           }
 
           debugPrint("dirId: $dirId");
@@ -120,6 +123,7 @@ GoRouter router(WidgetRef ref) {
               videoDioRepository: provider.videoDioRepository(),
               userSessionRepository: provider.userSessionRepository(),
               dirId: int.parse(dirId),
+              dirName: dirName,
             ),
           );
         },

@@ -41,7 +41,11 @@ class _DirListOnlineState extends State<DirListOnline> {
                   child: InkWell(
                     // p.basename(videoDir.dirPath)
                     onTap: () {
-                      Routes.pushOnlineVideoRoute(context, dirId: videoDir.id);
+                      Routes.pushOnlineVideoRoute(
+                        context,
+                        dirId: videoDir.id,
+                        dirName: videoDir.dirName,
+                      );
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),

@@ -21,5 +21,6 @@ abstract final class Routes {
   static void pushOnlineVideoRoute(
     BuildContext context, {
     required int dirId,
-  }) => context.push("${Routes.onlineVideo}/$dirId");
+    required String dirName,
+  }) => context.push("${Routes.onlineVideo}/$dirId/$dirName");
 }
