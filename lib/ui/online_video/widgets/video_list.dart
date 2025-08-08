@@ -92,7 +92,7 @@ class VideoList extends StatelessWidget {
                                   right: 5,
                                   child: Text(
                                     VideoProcess.videoDurationFormat(
-                                      videoEntity.duration,
+                                      videoEntity.duration*1000,
                                     ).toString().split(".").first,
                                     style: TextStyle(
                                       fontSize: Theme.of(
