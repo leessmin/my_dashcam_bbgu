@@ -39,11 +39,9 @@ class _DirListOnlineState extends State<DirListOnline> {
                 return Card(
                   clipBehavior: Clip.hardEdge,
                   child: InkWell(
+                    // p.basename(videoDir.dirPath)
                     onTap: () {
-                      Routes.pushVideoRoute(
-                        context,
-                        dirName: p.basename(videoDir.dirPath),
-                      );
+                      Routes.pushOnlineVideoRoute(context, dirId: videoDir.id);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),

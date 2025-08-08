@@ -16,7 +16,7 @@ class VideoDirResponse {
   final String createdTime;
   final int userId;
   final String deviceId;
-  final FirstVideo firstVideo;
+  final VideoResponse firstVideo;
   final int videoCount;
 
   Map<String, Object?> toMap() {
@@ -40,14 +40,41 @@ class VideoDirResponse {
       createdTime: json['created_time'] as String,
       userId: json['user_id'] as int,
       deviceId: json['device_id'] as String,
-      firstVideo: FirstVideo.fromJson(json['first_video']),
+      firstVideo: VideoResponse.fromJson(json['first_video']),
       videoCount: json['video_count'] as int,
+    );
+  }
+
+  factory VideoDirResponse.empty() {
+    return VideoDirResponse(
+      id: 0,
+      dirName: "",
+      dirPath: "",
+      createdTime: "",
+      userId: 0,
+      deviceId: "",
+      firstVideo: VideoResponse(
+        id: 0,
+        videoDirId: 0,
+        deviceId: "",
+        userId: 0,
+        videoPath: "",
+        videoName: "",
+        videoThumbnail: "",
+        duration: 0,
+        resolution: "",
+        videoType: "",
+        videoSize: 0,
+        createdTime: "",
+        fileHash256: "",
+      ),
+      videoCount: 0,
     );
   }
 }
 
-class FirstVideo {
-  const FirstVideo({
+class VideoResponse {
+  const VideoResponse({
     required this.id,
     required this.videoDirId,
     required this.deviceId,
@@ -95,8 +122,8 @@ class FirstVideo {
     };
   }
 
-  factory FirstVideo.fromJson(Map<String, dynamic> json) {
-    return FirstVideo(
+  factory VideoResponse.fromJson(Map<String, dynamic> json) {
+    return VideoResponse(
       id: json['id'] as int,
       videoDirId: json['video_dir_id'] as int,
       deviceId: json['device_id'] as String,

@@ -7,6 +7,8 @@ import 'package:my_dashcam/ui/home/view_models/home_viewmodel.dart';
 import 'package:my_dashcam/ui/home/widgets/home_screen.dart';
 import 'package:my_dashcam/ui/login/view_models/login_viewmodel.dart';
 import 'package:my_dashcam/ui/login/widgets/login_screen.dart';
+import 'package:my_dashcam/ui/online_video/view_models/online_video_viewmodel.dart';
+import 'package:my_dashcam/ui/online_video/widgets/online_video_screen.dart';
 import 'package:my_dashcam/ui/permissions/view_models/permissions_viewmodel.dart';
 import 'package:my_dashcam/ui/permissions/widgets/permissions_screen.dart';
 import 'package:my_dashcam/ui/register/view_models/register_viewmodel.dart';
@@ -35,7 +37,7 @@ GoRouter router(WidgetRef ref) {
     redirect: (context, state) async {
       debugPrint("state.path: ${state.fullPath}");
       final userSessionRepository = provider.userSessionRepository();
-      if (![Routes.login, Routes.register].contains(state.fullPath)) {
+      if (!Routes.noAuthRoutes.contains(state.fullPath)) {
         // 需要登陆才能使用的页面
         if ((await userSessionRepository.getToken()).isEmpty &&
             !(await userSessionRepository.getSkipLogin())) {
@@ -103,6 +105,24 @@ GoRouter router(WidgetRef ref) {
             loginRegisterRepository: provider.loginRegisterRepositor(),
           ),
         ),
+      ),
+      GoRoute(
+        path: "${Routes.onlineVideo}/:dirId",
+        builder: (context, state) {
+          final dirId = state.pathParameters["dirId"];
+          if (dirId == null) {
+            return Scaffold(body: Center(child: Text("dirId == null")));
+          }
+
+          debugPrint("dirId: $dirId");
+          return OnlineVideoScreen(
+            viewModel: OnlineVideoViewModel(
+              videoDioRepository: provider.videoDioRepository(),
+              userSessionRepository: provider.userSessionRepository(),
+              dirId: int.parse(dirId),
+            ),
+          );
+        },
       ),
     ],
   );
