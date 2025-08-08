@@ -28,114 +28,118 @@ class _DirListOnlineState extends State<DirListOnline> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: ListView.builder(
-        controller: widget.scrollController,
-        itemCount: widget.dirList.length,
-        itemBuilder: (context, index) {
-          final videoDir = widget.dirList[index];
+      child: widget.dirList.isEmpty
+          ? Center(child: Text("当前没有视频记录"))
+          : ListView.builder(
+              controller: widget.scrollController,
+              itemCount: widget.dirList.length,
+              itemBuilder: (context, index) {
+                final videoDir = widget.dirList[index];
 
-          return Card(
-            clipBehavior: Clip.hardEdge,
-            child: InkWell(
-              onTap: () {
-                Routes.pushVideoRoute(
-                  context,
-                  dirName: p.basename(videoDir.dirPath),
+                return Card(
+                  clipBehavior: Clip.hardEdge,
+                  child: InkWell(
+                    onTap: () {
+                      Routes.pushVideoRoute(
+                        context,
+                        dirName: p.basename(videoDir.dirPath),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                TimestampFormat.timestampToTimeString(
+                                  videoDir.dirName,
+                                ),
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              Text(
+                                "${videoDir.videoCount}",
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                            ],
+                          ),
+                          Divider(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                clipBehavior: Clip.hardEdge,
+                                child: Image.memory(
+                                  base64.decode(
+                                    videoDir.firstVideo.videoThumbnail
+                                        .split(",")
+                                        .last,
+                                  ),
+                                  fit: BoxFit.cover,
+                                  height: 72,
+                                  width: 128,
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                              title: Text("删除"),
+                                              content: Text("您确定要删除该行车记录吗?"),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text("取消"),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    widget.onDeleteVideoDir(
+                                                      videoDir.id,
+                                                    );
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text(
+                                                    "删除",
+                                                    style: TextStyle(
+                                                      color: getCatppuccinByCtx(
+                                                        context,
+                                                      ).red,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                      );
+                                    },
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: getCatppuccinByCtx(context).red,
+                                    ),
+                                  ),
+                                  Icon(Icons.chevron_right),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 );
               },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          TimestampFormat.timestampToTimeString(
-                            videoDir.dirName,
-                          ),
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                        Text(
-                          "${videoDir.videoCount}",
-                          style: Theme.of(context).textTheme.labelMedium,
-                        ),
-                      ],
-                    ),
-                    Divider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          clipBehavior: Clip.hardEdge,
-                          child: Image.memory(
-                            base64.decode(
-                              videoDir.firstVideo.videoThumbnail
-                                  .split(",")
-                                  .last,
-                            ),
-                            fit: BoxFit.cover,
-                            height: 72,
-                            width: 128,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      AlertDialog(
-                                        title: Text("删除"),
-                                        content: Text("您确定要删除该行车记录吗?"),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text("取消"),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              widget.onDeleteVideoDir(videoDir.id);
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text(
-                                              "删除",
-                                              style: TextStyle(
-                                                color: getCatppuccinByCtx(
-                                                  context,
-                                                ).red,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                );
-                              },
-                              icon: Icon(
-                                Icons.delete,
-                                color: getCatppuccinByCtx(context).red,
-                              ),
-                            ),
-                            Icon(Icons.chevron_right),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
             ),
-          );
-        },
-      ),
     );
   }
 }
