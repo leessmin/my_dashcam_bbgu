@@ -9,6 +9,7 @@ abstract final class Routes {
   static const login = "/login";
   static const register = "/register";
   static const onlineVideo = "/onlineVideo";
+  static const onlineDir = "/onlineDir";
 
   // 不需要权限校验的路由列表
   static List<String> get noAuthRoutes => [Routes.login, Routes.register];
@@ -22,5 +23,12 @@ abstract final class Routes {
     BuildContext context, {
     required int dirId,
     required String dirName,
-  }) => context.push("${Routes.onlineVideo}/$dirId/$dirName");
+    required String topBarTitle,
+  }) => context.push("${Routes.onlineVideo}/$dirId/$dirName/$topBarTitle");
+
+  static void pushOnlineDirRoute(
+    BuildContext context, {
+    required String deviceId,
+    required String deviceName,
+  }) => context.push("${Routes.onlineDir}/$deviceId/$deviceName");
 }

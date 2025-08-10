@@ -45,7 +45,9 @@ class _UserScreenState extends State<UserScreen> {
                     ),
                     Divider(),
                     uiState.loading
-                        ? Expanded(child: Center(child: CircularProgressIndicator()))
+                        ? Expanded(
+                            child: Center(child: CircularProgressIndicator()),
+                          )
                         : Expanded(
                             child: uiState.devices.isEmpty
                                 ? Center(child: Text("没有登陆,无法显示设备"))
@@ -57,6 +59,7 @@ class _UserScreenState extends State<UserScreen> {
                                     children: uiState.devices
                                         .map(
                                           (device) => _deviceCard(
+                                            deviceId: device.id,
                                             deviceName: device.model,
                                             version: device.versionRelease,
                                             display: device.display,
@@ -111,6 +114,7 @@ class _UserScreenState extends State<UserScreen> {
 
   // 设备卡片
   Widget _deviceCard({
+    required String deviceId,
     required String deviceName,
     required String version,
     required String display,
@@ -118,7 +122,13 @@ class _UserScreenState extends State<UserScreen> {
     return Card(
       clipBehavior: Clip.hardEdge,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Routes.pushOnlineDirRoute(
+            context,
+            deviceId: deviceId,
+            deviceName: deviceName,
+          );
+        },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

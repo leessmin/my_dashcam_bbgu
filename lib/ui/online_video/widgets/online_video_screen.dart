@@ -5,7 +5,6 @@ import 'package:my_dashcam/ui/core/ui/loading_overlay.dart';
 import 'package:my_dashcam/ui/online_video/view_models/online_video_viewmodel.dart';
 import 'package:my_dashcam/ui/online_video/widgets/video_list.dart';
 import 'package:my_dashcam/ui/online_video/widgets/video_play_box.dart';
-import 'package:my_dashcam/utils/timestamp_format.dart';
 
 class OnlineVideoScreen extends StatefulWidget {
   const OnlineVideoScreen({super.key, required this.viewModel});
@@ -112,7 +111,7 @@ class _OnlineVideoScreenState extends State<OnlineVideoScreen> {
     return Scaffold(
       appBar: defaultChildAppBar(
         context,
-        title: TimestampFormat.timestampToTimeString(widget.viewModel.dirName),
+        title: widget.viewModel.topBarTitle,
         actions: [
           IconButton(
             onPressed: () => exportVideo(context),

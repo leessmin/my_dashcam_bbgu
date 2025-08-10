@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_dashcam/ui/home/view_models/video_list_viewmodel.dart';
-import 'package:my_dashcam/ui/home/widgets/dir_list_online.dart';
+import 'package:my_dashcam/ui/core/ui/dir_list_online.dart';
 
 import 'dir_list.dart';
 
@@ -73,6 +73,7 @@ class _VideoListScreenState extends State<VideoListScreen>
                     scrollController: _scrollController,
                     onDeleteVideoDir: (int id) =>
                         widget.viewModel.deleteOnlineVideoDir(id),
+                    deviceName: "本机",
                   ),
                 ],
               ),

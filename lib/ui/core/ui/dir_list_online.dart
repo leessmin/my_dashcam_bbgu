@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:my_dashcam/data/repositories/videoDio/models/response.dart';
 import 'package:my_dashcam/routing/routes.dart';
@@ -10,13 +9,15 @@ class DirListOnline extends StatefulWidget {
   const DirListOnline({
     super.key,
     required this.dirList,
-    required this.scrollController,
+    this.scrollController,
     required this.onDeleteVideoDir,
+    required this.deviceName,
   });
 
   final List<VideoDirResponse> dirList;
-  final ScrollController scrollController;
+  final ScrollController? scrollController;
   final Future<void> Function(int) onDeleteVideoDir;
+  final String deviceName;
 
   @override
   State<DirListOnline> createState() => _DirListOnlineState();
@@ -44,6 +45,7 @@ class _DirListOnlineState extends State<DirListOnline> {
                         context,
                         dirId: videoDir.id,
                         dirName: videoDir.dirName,
+                        topBarTitle: widget.deviceName,
                       );
                     },
                     child: Padding(

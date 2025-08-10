@@ -12,7 +12,7 @@ class OnlineVideoViewModel extends ChangeNotifier {
     required VideoDioRepository videoDioRepository,
     required UserSessionRepository userSessionRepository,
     required this.dirId,
-    required this.dirName,
+    required this.topBarTitle,
   }) : _videoDioRepository = videoDioRepository,
        _userSessionRepository = userSessionRepository {
     loadVideos();
@@ -24,8 +24,8 @@ class OnlineVideoViewModel extends ChangeNotifier {
   // 目录名字
   final int dirId;
 
-  // 目录名字
-  final String dirName;
+  // topBar标题
+  final String topBarTitle;
 
   List<VideoResponse> _videos = [];
 
