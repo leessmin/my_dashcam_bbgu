@@ -7,6 +7,14 @@ import 'package:platform_device_id_plus/platform_device_id.dart';
 
 /// 手机设备
 class DeviceRepository {
+  /// 获取设备id
+  Future<String> getDeviceId() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    final info = await deviceInfo.androidInfo;
+
+    return  await PlatformDeviceId.getDeviceId ?? info.id;
+  }
+
   /// 注册设备
   Future<Response<DeviceRegisterResponse?>?> registerDevice() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -14,7 +22,7 @@ class DeviceRepository {
     final response = await fetch.post<Map<String, dynamic>>(
       "/device/register",
       data: DeviceRegisterRequest(
-        id: await PlatformDeviceId.getDeviceId ?? info.id,
+        id: await getDeviceId(),
         model: info.model,
         versionRelease: info.version.release,
         display: info.display,

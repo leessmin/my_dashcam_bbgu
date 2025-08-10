@@ -63,6 +63,7 @@ class _UserScreenState extends State<UserScreen> {
                                             deviceName: device.model,
                                             version: device.versionRelease,
                                             display: device.display,
+                                            isLocal: device.id == widget.viewModel.deviceId,
                                           ),
                                         )
                                         .toList(),
@@ -118,9 +119,11 @@ class _UserScreenState extends State<UserScreen> {
     required String deviceName,
     required String version,
     required String display,
+    required bool isLocal,
   }) {
     return Card(
       clipBehavior: Clip.hardEdge,
+      color: isLocal ? getCatppuccinByCtx(context).lavender : null,
       child: InkWell(
         onTap: () {
           Routes.pushOnlineDirRoute(
@@ -133,16 +136,25 @@ class _UserScreenState extends State<UserScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(deviceName, style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              deviceName,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: isLocal ? getCatppuccinByCtx(context).rosewater : null,
+              ),
+            ),
             Text(
               "Android$version",
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: isLocal ? getCatppuccinByCtx(context).rosewater : null,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 display,
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: isLocal ? getCatppuccinByCtx(context).rosewater : null,
+                ),
               ),
             ),
           ],

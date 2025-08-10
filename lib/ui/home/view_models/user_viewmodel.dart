@@ -34,12 +34,16 @@ class UserViewModel extends ChangeNotifier {
   })
       : _userSessionRepository = userSessionRepository,
         _deviceRepository = deviceRepository {
+    loadDeviceId();
     loadUiState();
   }
 
   final UserSessionRepository _userSessionRepository;
 
   final DeviceRepository _deviceRepository;
+
+  String _deviceId = "";
+  String get deviceId => _deviceId;
 
   UserUiState _uiState = UserUiState(
       username: "", email: "", devices: [], loading: false);
@@ -62,5 +66,10 @@ class UserViewModel extends ChangeNotifier {
   // 退出登陆
   Future<void> logout() async {
     await _userSessionRepository.cleanUserSession();
+  }
+
+  void loadDeviceId() async {
+    _deviceId = await _deviceRepository.getDeviceId();
+    notifyListeners();
   }
 }
