@@ -22,6 +22,14 @@ class _VideoListScreenState extends State<VideoListScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        // 标签栏滚到在线视频，刷新在线视频
+        if(_tabController.index == 1){
+          widget.viewModel.getOnlineVideoDir();
+        }
+      }
+    });
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -62,19 +70,23 @@ class _VideoListScreenState extends State<VideoListScreen>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  DirList(
-                    dirList: videoDirs,
-                    scrollController: _scrollController,
-                    onDeleteVideoDir: (String dirPath) =>
-                        widget.viewModel.deleteVideoDir(dirPath),
-                  ),
-                  DirListOnline(
-                    dirList: widget.viewModel.onlineVideoDirs,
-                    scrollController: _scrollController,
-                    onDeleteVideoDir: (int id) =>
-                        widget.viewModel.deleteOnlineVideoDir(id),
-                    deviceName: "本机",
-                  ),
+                  widget.viewModel.loading
+                      ? Center(child: CircularProgressIndicator())
+                      : DirList(
+                          dirList: videoDirs,
+                          scrollController: _scrollController,
+                          onDeleteVideoDir: (String dirPath) =>
+                              widget.viewModel.deleteVideoDir(dirPath),
+                        ),
+                  widget.viewModel.loading
+                      ? Center(child: CircularProgressIndicator())
+                      : DirListOnline(
+                          dirList: widget.viewModel.onlineVideoDirs,
+                          scrollController: _scrollController,
+                          onDeleteVideoDir: (int id) =>
+                              widget.viewModel.deleteOnlineVideoDir(id),
+                          deviceName: "本机",
+                        ),
                 ],
               ),
             ),

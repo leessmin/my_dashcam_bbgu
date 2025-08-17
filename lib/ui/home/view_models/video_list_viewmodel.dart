@@ -27,9 +27,16 @@ class VideoListViewModel extends ChangeNotifier {
 
   List<VideoDirResponse> get onlineVideoDirs => _onlineVideoDirs;
 
+  // 加载
+  bool loading = false;
+
   // 获取视频目录
   Future<void> getVideoDir() async {
+    loading = true;
+    notifyListeners();
+
     _videoDirs = await _videoDirectoryRepository.getVideoParentDirsReversal();
+    loading = false;
     notifyListeners();
   }
 
@@ -41,10 +48,14 @@ class VideoListViewModel extends ChangeNotifier {
 
   // 获取联网的视频目录
   Future<void> getOnlineVideoDir() async {
+    loading = true;
+    notifyListeners();
+
     final result = (await _videoDioRepository.getVideoDir(null));
     if (result.code == 200) {
       _onlineVideoDirs = result.data!;
     }
+    loading = false;
     notifyListeners();
   }
 
