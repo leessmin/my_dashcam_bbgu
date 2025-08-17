@@ -63,7 +63,9 @@ class _UserScreenState extends State<UserScreen> {
                                             deviceName: device.model,
                                             version: device.versionRelease,
                                             display: device.display,
-                                            isLocal: device.id == widget.viewModel.deviceId,
+                                            isLocal:
+                                                device.id ==
+                                                widget.viewModel.deviceId,
                                           ),
                                         )
                                         .toList(),
@@ -121,42 +123,76 @@ class _UserScreenState extends State<UserScreen> {
     required String display,
     required bool isLocal,
   }) {
-    return Card(
-      clipBehavior: Clip.hardEdge,
-      color: isLocal ? getCatppuccinByCtx(context).lavender : null,
-      child: InkWell(
-        onTap: () {
-          Routes.pushOnlineDirRoute(
-            context,
-            deviceId: deviceId,
-            deviceName: deviceName,
-          );
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+    return InkWell(
+      onTap: () {
+        Routes.pushOnlineDirRoute(
+          context,
+          deviceId: deviceId,
+          deviceName: deviceName,
+        );
+      },
+      child: Card(
+        clipBehavior: Clip.hardEdge,
+        color: isLocal ? getCatppuccinByCtx(context).lavender : null,
+        child: Stack(
+          alignment: Alignment.center,
           children: [
-            Text(
-              deviceName,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: isLocal ? getCatppuccinByCtx(context).rosewater : null,
-              ),
-            ),
-            Text(
-              "Android$version",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: isLocal ? getCatppuccinByCtx(context).rosewater : null,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                display,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: isLocal ? getCatppuccinByCtx(context).rosewater : null,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  deviceName,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: isLocal
+                        ? getCatppuccinByCtx(context).rosewater
+                        : null,
+                  ),
                 ),
-              ),
+                Text(
+                  "Android$version",
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: isLocal
+                        ? getCatppuccinByCtx(context).rosewater
+                        : null,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    display,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: isLocal
+                          ? getCatppuccinByCtx(context).rosewater
+                          : null,
+                    ),
+                  ),
+                ),
+              ],
             ),
+            ?isLocal
+                ? Positioned(
+                    top: 0,
+                    right: 5,
+                    child: ActionChip(
+                      label: Text(
+                        "当前设备",
+                        style: TextTheme.of(context).labelSmall?.copyWith(
+                          color: getCatppuccinByCtx(context).subtext0,
+                        ),
+                      ),
+                      labelPadding: EdgeInsets.symmetric(horizontal: 2),
+                      padding: EdgeInsets.zero,
+                      visualDensity: VisualDensity(
+                        horizontal: -4,
+                        vertical: -4,
+                      ),
+                      color: WidgetStatePropertyAll(
+                        getCatppuccinByCtx(context).sky,
+                      ),
+                    ),
+                  )
+                : null,
           ],
         ),
       ),
