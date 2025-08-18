@@ -5,6 +5,7 @@ import 'package:my_dashcam/data/repositories/userSession/user_session_repository
 import 'package:my_dashcam/data/repositories/videoDio/models/response.dart';
 import 'package:my_dashcam/data/repositories/videoDio/video_dio_repository.dart';
 import 'package:my_dashcam/ui/video/widgets/video_play_box.dart';
+import 'package:my_dashcam/utils/loading_command.dart';
 import 'package:video_player/video_player.dart';
 
 class OnlineVideoViewModel extends ChangeNotifier {
@@ -44,15 +45,19 @@ class OnlineVideoViewModel extends ChangeNotifier {
 
   ValueNotifier<ChewieController?> get chewieController => _chewieController;
 
+  LoadingCommand loading = LoadingCommand();
+
   // 加载视频
   Future<void> loadVideos() async {
-    final result = await _videoDioRepository.getVideos(dirId);
-    if (result.code != 200) {
-      return;
-    }
-    _videos = result.data;
-    await _loadChewieController();
-    notifyListeners();
+    loading.command(() async {
+      final result = await _videoDioRepository.getVideos(dirId);
+      if (result.code != 200) {
+        return;
+      }
+      _videos = result.data;
+      await _loadChewieController();
+      notifyListeners();
+    });
   }
 
   // 自动播放视频
@@ -151,7 +156,7 @@ class OnlineVideoViewModel extends ChangeNotifier {
   }
 
   /// 视频导出进度
-   ValueNotifier<String> exportProgress = ValueNotifier("0");
+  ValueNotifier<String> exportProgress = ValueNotifier("0");
 
   /// 是否导出视频时进行视频合并
   final ValueNotifier<bool> _isMerge = ValueNotifier(false);
@@ -170,16 +175,17 @@ class OnlineVideoViewModel extends ChangeNotifier {
         // 合并视频并导出
         await _videoDioRepository.downloadConcatVideo(
           targetVideos.map((item) => item.id).toList(),
-          progressFn: (value){
+          progressFn: (value) {
             exportProgress.value = value;
-          }
+          },
         );
       } else {
         for (final entry in targetVideos.asMap().entries) {
           final index = entry.key;
           final video = entry.value;
           await _videoDioRepository.downloadVideo(video);
-          exportProgress.value = "${(index + 1).toDouble() / targetVideos.length * 100}";
+          exportProgress.value =
+              "${(index + 1).toDouble() / targetVideos.length * 100}";
         }
       }
     } catch (e) {

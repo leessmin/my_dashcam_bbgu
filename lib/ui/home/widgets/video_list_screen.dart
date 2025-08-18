@@ -25,7 +25,7 @@ class _VideoListScreenState extends State<VideoListScreen>
     _tabController.addListener(() {
       if (!_tabController.indexIsChanging) {
         // 标签栏滚到在线视频，刷新在线视频
-        if(_tabController.index == 1){
+        if (_tabController.index == 1) {
           widget.viewModel.getOnlineVideoDir();
         }
       }
@@ -54,7 +54,10 @@ class _VideoListScreenState extends State<VideoListScreen>
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: Listenable.merge([widget.viewModel]),
+      listenable: Listenable.merge([
+        widget.viewModel,
+        widget.viewModel.loading.status,
+      ]),
       builder: (context, _) {
         final videoDirs = widget.viewModel.videoDirs;
         return Column(
@@ -70,7 +73,7 @@ class _VideoListScreenState extends State<VideoListScreen>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  widget.viewModel.loading
+                  widget.viewModel.loading.status.value
                       ? Center(child: CircularProgressIndicator())
                       : DirList(
                           dirList: videoDirs,
@@ -78,7 +81,7 @@ class _VideoListScreenState extends State<VideoListScreen>
                           onDeleteVideoDir: (String dirPath) =>
                               widget.viewModel.deleteVideoDir(dirPath),
                         ),
-                  widget.viewModel.loading
+                  widget.viewModel.loading.status.value
                       ? Center(child: CircularProgressIndicator())
                       : DirListOnline(
                           dirList: widget.viewModel.onlineVideoDirs,

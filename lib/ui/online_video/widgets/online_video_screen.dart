@@ -123,85 +123,110 @@ class _OnlineVideoScreenState extends State<OnlineVideoScreen> {
         ],
       ),
       body: ListenableBuilder(
-        listenable: widget.viewModel,
+        listenable: Listenable.merge([
+          widget.viewModel,
+          widget.viewModel.loading.status,
+        ]),
         builder: (context, _) {
+          final loadingStatus = widget.viewModel.loading.status.value;
+
           if (widget.viewModel.videos.isEmpty) {
             return SizedBox();
           }
 
-          return Column(
-            children: [
-              VideoPlayBox(chewieController: widget.viewModel.chewieController),
-              Flexible(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      widget.viewModel.isExportMode
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "导出视频",
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.titleMedium,
-                                ),
-                                Text(
-                                  "${widget.viewModel.exportVideos.length}/${widget.viewModel.videos.length}",
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    widget.viewModel.setExportMode(false);
-                                    widget.viewModel.cleanExportVideos();
-                                  },
-                                  child: Text(
-                                    "取消",
-                                    style: TextStyle(
-                                      color: getCatppuccinByCtx(context).red,
-                                    ),
+          debugPrint("$loadingStatus,66666666");
+          return loadingStatus
+              ? Center(child: CircularProgressIndicator())
+              : Column(
+                  children: [
+                    VideoPlayBox(
+                      chewieController: widget.viewModel.chewieController,
+                    ),
+                    Flexible(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 10,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            widget.viewModel.isExportMode
+                                ? Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "导出视频",
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.titleMedium,
+                                      ),
+                                      Text(
+                                        "${widget.viewModel.exportVideos.length}/${widget.viewModel.videos.length}",
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.labelLarge,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          widget.viewModel.setExportMode(false);
+                                          widget.viewModel.cleanExportVideos();
+                                        },
+                                        child: Text(
+                                          "取消",
+                                          style: TextStyle(
+                                            color: getCatppuccinByCtx(
+                                              context,
+                                            ).red,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "视频列表",
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.titleLarge,
+                                      ),
+                                      Text(
+                                        "${widget.viewModel.currentIndex + 1}/${widget.viewModel.videos.length}个视频",
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.labelLarge,
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
-                            )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "视频列表",
-                                  style: Theme.of(context).textTheme.titleLarge,
-                                ),
-                                Text(
-                                  "${widget.viewModel.currentIndex + 1}/${widget.viewModel.videos.length}个视频",
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                              ],
+                            SizedBox(height: 10),
+                            Expanded(
+                              child: VideoList(
+                                videos: widget.viewModel.videos,
+                                isExportMode: widget.viewModel.isExportMode,
+                                tapVideo: (index) =>
+                                    widget.viewModel.setCurrentPlay(index),
+                                currentVideoIdx: widget.viewModel.currentIndex,
+                                onLongPress: () =>
+                                    widget.viewModel.setExportMode(true),
+                                onSwitchExportVideo:
+                                    widget.viewModel.switchExportVideo,
+                                exportVideo: widget.viewModel.exportVideos,
+                              ),
                             ),
-                      SizedBox(height: 10),
-                      Expanded(
-                        child: VideoList(
-                          videos: widget.viewModel.videos,
-                          isExportMode: widget.viewModel.isExportMode,
-                          tapVideo: (index) =>
-                              widget.viewModel.setCurrentPlay(index),
-                          currentVideoIdx: widget.viewModel.currentIndex,
-                          onLongPress: () =>
-                              widget.viewModel.setExportMode(true),
-                          onSwitchExportVideo:
-                              widget.viewModel.switchExportVideo,
-                          exportVideo: widget.viewModel.exportVideos,
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          );
+                    ),
+                  ],
+                );
         },
       ),
     );

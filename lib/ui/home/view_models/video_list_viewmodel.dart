@@ -3,6 +3,7 @@ import 'package:my_dashcam/data/models/video_directory.dart';
 import 'package:my_dashcam/data/repositories/videoDio/models/response.dart';
 import 'package:my_dashcam/data/repositories/videoDio/video_dio_repository.dart';
 import 'package:my_dashcam/data/repositories/videoDirctory/video_directory_repository.dart';
+import 'package:my_dashcam/utils/loading_command.dart';
 
 class VideoListViewModel extends ChangeNotifier {
   VideoListViewModel({
@@ -28,16 +29,14 @@ class VideoListViewModel extends ChangeNotifier {
   List<VideoDirResponse> get onlineVideoDirs => _onlineVideoDirs;
 
   // 加载
-  bool loading = false;
+  LoadingCommand loading = LoadingCommand();
 
   // 获取视频目录
   Future<void> getVideoDir() async {
-    loading = true;
-    notifyListeners();
-
-    _videoDirs = await _videoDirectoryRepository.getVideoParentDirsReversal();
-    loading = false;
-    notifyListeners();
+    loading.command(() async {
+      _videoDirs = await _videoDirectoryRepository.getVideoParentDirsReversal();
+      notifyListeners();
+    });
   }
 
   // 删除视频目录
@@ -48,15 +47,13 @@ class VideoListViewModel extends ChangeNotifier {
 
   // 获取联网的视频目录
   Future<void> getOnlineVideoDir() async {
-    loading = true;
-    notifyListeners();
-
-    final result = (await _videoDioRepository.getVideoDir(null));
-    if (result.code == 200) {
-      _onlineVideoDirs = result.data!;
-    }
-    loading = false;
-    notifyListeners();
+    loading.command(() async {
+      final result = (await _videoDioRepository.getVideoDir(null));
+      if (result.code == 200) {
+        _onlineVideoDirs = result.data!;
+      }
+      notifyListeners();
+    });
   }
 
   // 删除联网的视频目录
