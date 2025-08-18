@@ -17,6 +17,7 @@ import 'package:my_dashcam/ui/register/view_models/register_viewmodel.dart';
 import 'package:my_dashcam/ui/register/widgets/register_screen.dart';
 import 'package:my_dashcam/ui/setting/view_models/setting_viewmodel.dart';
 import 'package:my_dashcam/ui/setting/widgets/setting_screen.dart';
+import 'package:my_dashcam/ui/track/widgets/track_screen.dart';
 import 'package:my_dashcam/ui/video/view_models/video_viewmodel.dart';
 import 'package:my_dashcam/ui/video/widgets/video_screen.dart';
 import 'package:my_dashcam/utils/timestamp_format.dart';
@@ -157,6 +158,12 @@ GoRouter router(WidgetRef ref) {
               deviceId: deviceId,
             ),
           );
+        },
+      ),
+      GoRoute(
+        path: Routes.track,
+        builder: (context, state) {
+          return TrackScreen();
         },
       ),
     ],

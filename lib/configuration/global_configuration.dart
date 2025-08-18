@@ -26,4 +26,7 @@ class GlobalConfiguration {
 
   // 服务器地址
   static String get apiUri => "http://100.93.208.87:8080/api";
+
+  // 高德地图sdk
+  static String get amapApiKeys => "0f9a5bd4b6fa8f39380818bbb4913d4d";
 }

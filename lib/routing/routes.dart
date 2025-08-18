@@ -10,6 +10,7 @@ abstract final class Routes {
   static const register = "/register";
   static const onlineVideo = "/onlineVideo";
   static const onlineDir = "/onlineDir";
+  static const track = "/track";
 
   // 不需要权限校验的路由列表
   static List<String> get noAuthRoutes => [Routes.login, Routes.register];
