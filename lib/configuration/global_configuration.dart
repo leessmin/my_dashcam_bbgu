@@ -24,6 +24,19 @@ class GlobalConfiguration {
     return videoDir.path;
   }
 
+  // 位置文件存储路径
+  // /data/user/0/com.leessmin.my_dashcam/app_flutter/files/location/
+  static Future<String> get locationPath async {
+    final Directory baseDir = await getApplicationSupportDirectory();
+    final Directory locationDir = Directory("${baseDir.path}/location");
+
+    // 确保目录存在，不存在则创建目录
+    if (!await locationDir.exists()) {
+      await locationDir.create(recursive: true);
+    }
+    return locationDir.path;
+  }
+
   // 服务器地址
   static String get apiUri => "http://100.93.208.87:8080/api";
 
