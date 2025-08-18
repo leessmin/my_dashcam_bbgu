@@ -4,11 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:my_dashcam/configuration/global_configuration.dart';
 import 'package:my_dashcam/data/models/video_directory.dart';
 import 'package:my_dashcam/data/services/location_service.dart';
+import 'package:my_dashcam/data/services/sqlite_videos_service.dart';
 import 'package:path/path.dart' as p;
 
 // 视频目录
 class VideoDirectoryService {
   final LocationService _locationService = LocationService();
+  final SqliteVideosService _sqliteVideosService = SqliteVideosService();
 
   // 获取所有视频目录
   Future<List<FileSystemEntity>> get _allOriginalVideoDir async {
@@ -79,6 +81,8 @@ class VideoDirectoryService {
 
       // 删除视频目录，顺带删除位置文件
       _locationService.deleteLocationFile("${p.basename(dirPath)}.txt");
+      // 删除位置信息
+      _sqliteVideosService.deleteVideoByDirName(p.basename(dirPath));
     } else {
       debugPrint("$dirPath 目录不存在: $dirPath}");
     }
