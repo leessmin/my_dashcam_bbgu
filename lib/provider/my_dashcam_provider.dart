@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_dashcam/data/repositories/configuration/configuration_repository.dart';
 import 'package:my_dashcam/data/repositories/device/device_repository.dart';
+import 'package:my_dashcam/data/repositories/location/location_repository.dart';
 import 'package:my_dashcam/data/repositories/loginRegister/login_register_repository.dart';
 import 'package:my_dashcam/data/repositories/permissions/permission_repository.dart';
 import 'package:my_dashcam/data/repositories/userSession/user_session_repository.dart';
@@ -9,6 +10,7 @@ import 'package:my_dashcam/data/repositories/videoDirctory/video_directory_repos
 import 'package:my_dashcam/data/repositories/videoExport/video_export_repository.dart';
 import 'package:my_dashcam/provider/configuration_provider.dart';
 import 'package:my_dashcam/provider/device_provider.dart';
+import 'package:my_dashcam/provider/location_provider.dart';
 import 'package:my_dashcam/provider/permissions_provider.dart';
 import 'package:my_dashcam/provider/user_session_provider.dart';
 import 'package:my_dashcam/provider/video_dio_provider.dart';
@@ -43,5 +45,8 @@ class MyDashCamProvider {
 
   DeviceRepository deviceRepository() => _ref.read(deviceProvider);
 
-  VideoDioRepository videoDioRepository()=>_ref.read(videoDioProvider);
+  VideoDioRepository videoDioRepository() => _ref.read(videoDioProvider);
+
+  LocationRepository localLocationRepository() =>
+      _ref.read(localLocationProvider);
 }

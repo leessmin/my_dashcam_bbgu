@@ -36,8 +36,10 @@
 
     <application
         android:name="${applicationName}"
+        android:allowNativeHeapPointerTagging="false"
         android:icon="@mipmap/ic_launcher"
         android:label="my_dashcam"
+        android:largeHeap="true"
         android:usesCleartextTraffic="true">
 
         <service

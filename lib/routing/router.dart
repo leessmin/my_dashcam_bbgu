@@ -17,6 +17,7 @@ import 'package:my_dashcam/ui/register/view_models/register_viewmodel.dart';
 import 'package:my_dashcam/ui/register/widgets/register_screen.dart';
 import 'package:my_dashcam/ui/setting/view_models/setting_viewmodel.dart';
 import 'package:my_dashcam/ui/setting/widgets/setting_screen.dart';
+import 'package:my_dashcam/ui/track/view_models/track_viewmodel.dart';
 import 'package:my_dashcam/ui/track/widgets/track_screen.dart';
 import 'package:my_dashcam/ui/video/view_models/video_viewmodel.dart';
 import 'package:my_dashcam/ui/video/widgets/video_screen.dart';
@@ -161,9 +162,19 @@ GoRouter router(WidgetRef ref) {
         },
       ),
       GoRoute(
-        path: Routes.track,
+        path: "${Routes.track}/:filename",
         builder: (context, state) {
-          return TrackScreen();
+          final filename = state.pathParameters["filename"];
+          if (filename == null) {
+            return Scaffold(body: Center(child: Text("filename == null")));
+          }
+          return TrackScreen(
+            viewModel: TrackViewModel(
+              context: context,
+              locationRepository: provider.localLocationRepository(),
+              name: filename,
+            ),
+          );
         },
       ),
     ],

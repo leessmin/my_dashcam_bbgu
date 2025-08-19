@@ -1,3 +1,4 @@
+import 'package:amap_map/amap_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_dashcam/data/repositories/locationDio/location_dio_repository.dart';
@@ -9,7 +10,9 @@ import 'package:my_dashcam/ui/core/themes/theme.dart';
 import 'package:my_dashcam/utils/flutter_channel.dart';
 import 'package:toastification/toastification.dart';
 import 'package:workmanager/workmanager.dart';
+import 'package:x_amap_base/x_amap_base.dart';
 
+import 'configuration/global_configuration.dart';
 import 'worker/worker.dart';
 
 void main() {
@@ -35,11 +38,42 @@ void boot() async {
   );
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  bool _isAMapInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_isAMapInitialized) {
+        // 高德地图sdk初始化
+        AMapInitializer.init(
+          context,
+          apiKey: AMapApiKey(androidKey: GlobalConfiguration.amapApiKeys),
+        );
+
+        AMapInitializer.updatePrivacyAgree(
+          AMapPrivacyStatement(
+            hasAgree: true,
+            hasContains: true,
+            hasShow: true,
+          ),
+        );
+        _isAMapInitialized = true;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return ToastificationWrapper(
       child: MaterialApp.router(
         theme: catppuccinTheme(getCatppuccin(false)),

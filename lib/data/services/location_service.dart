@@ -17,4 +17,18 @@ class LocationService {
       debugPrint("${file.path} 文件不存在!!!");
     }
   }
+
+  /// 读取位置文件内容
+  Future<String> getFileString(String filename) async {
+    try {
+      final locationDirPath = await GlobalConfiguration.locationPath;
+      final file = File("$locationDirPath/$filename");
+      if (await file.exists()) {
+        return await file.readAsString();
+      }
+      return "";
+    } catch (e) {
+      return "";
+    }
+  }
 }

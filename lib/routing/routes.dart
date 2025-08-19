@@ -32,4 +32,19 @@ abstract final class Routes {
     required String deviceId,
     required String deviceName,
   }) => context.push("${Routes.onlineDir}/$deviceId/$deviceName");
+
+  /// 跳转至路径页面
+  /// [filename] 路径文件名
+  /// [type] 类型 0本地 1联网 默认0
+  static void pushTrack(
+    BuildContext context, {
+    required String filename,
+    int type = 0,
+  }) {
+    if (type == 0) {
+      context.push("${Routes.track}/$filename");
+    } else if (type == 1) {
+      context.push("${Routes.track}/$filename");
+    }
+  }
 }

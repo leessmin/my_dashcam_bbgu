@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_dashcam/routing/routes.dart';
 import 'package:my_dashcam/ui/core/themes/catppuccin.dart';
 import 'package:my_dashcam/ui/core/ui/default_child_app_bar.dart';
 import 'package:my_dashcam/ui/core/ui/loading_overlay.dart';
@@ -19,8 +20,8 @@ class VideoScreen extends StatefulWidget {
 class _VideoScreenState extends State<VideoScreen> {
   @override
   void dispose() {
-    super.dispose();
     widget.viewModel.dispose();
+    super.dispose();
   }
 
   // 导出视频
@@ -114,6 +115,12 @@ class _VideoScreenState extends State<VideoScreen> {
         context,
         title: TimestampFormat.timestampToTimeString(widget.viewModel.dirName),
         actions: [
+          IconButton(
+            onPressed: () =>
+                Routes.pushTrack(context, filename: widget.viewModel.dirName),
+            icon: Icon(Icons.map_outlined),
+            color: getCatppuccinByCtx(context).sky,
+          ),
           IconButton(
             onPressed: () => exportVideo(context),
             icon: Icon(

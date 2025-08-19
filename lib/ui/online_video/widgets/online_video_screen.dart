@@ -116,7 +116,7 @@ class _OnlineVideoScreenState extends State<OnlineVideoScreen> {
         title: widget.viewModel.topBarTitle,
         actions: [
           IconButton(
-            onPressed: () => context.push(Routes.track),
+            onPressed: () => Routes.pushTrack(context, filename: widget.viewModel.topBarTitle),
             icon: Icon(Icons.map_outlined),
             color: getCatppuccinByCtx(context).sky,
           ),
@@ -141,7 +141,6 @@ class _OnlineVideoScreenState extends State<OnlineVideoScreen> {
             return SizedBox();
           }
 
-          debugPrint("$loadingStatus,66666666");
           return loadingStatus
               ? Center(child: CircularProgressIndicator())
               : Column(
