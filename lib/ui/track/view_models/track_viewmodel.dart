@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_dashcam/data/repositories/location/location_data.dart';
 import 'package:my_dashcam/data/repositories/location/location_repository.dart';
 import 'package:my_dashcam/ui/core/themes/catppuccin.dart';
+import 'package:my_dashcam/utils/latlong.dart';
 import 'package:my_dashcam/utils/loading_command.dart';
 import 'package:x_amap_base/x_amap_base.dart';
 
@@ -37,6 +38,20 @@ class TrackViewModel extends ChangeNotifier {
 
   Set<Marker> get marker => _marker;
 
+  // 行使总时长
+  Duration _totalTime = Duration();
+
+  Duration get totalTime => _totalTime;
+
+  // 行使路长，单位Km
+  double _totalDistance = 0;
+
+  double get totalDistance => _totalDistance;
+
+  double _avgSpeed = 0;
+
+  double get avgSpeed => _avgSpeed;
+
   Future<void> _load(String name) async {
     final polylineColor = getCatppuccinByCtx(context).blue;
 
@@ -50,8 +65,18 @@ class TrackViewModel extends ChangeNotifier {
         ),
       );
 
-      _marker.add(Marker(position: LatLng(data.first.lat, data.first.lng)));
-      _marker.add(Marker(position: LatLng(data.last.lat, data.last.lng)));
+      final firstData = data.first;
+      final lastData = data.last;
+
+      _marker.add(Marker(position: LatLng(firstData.lat, firstData.lng)));
+      _marker.add(Marker(position: LatLng(lastData.lat, lastData.lng)));
+
+      _totalTime = lastData.time.difference(firstData.time);
+
+      _totalDistance = LatLong.calcDistance(data);
+
+      _avgSpeed =
+          LatLong.avgSpeedKmH(_totalDistance, _totalTime.inSeconds.toDouble());
 
       notifyListeners();
     });
