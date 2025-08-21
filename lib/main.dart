@@ -1,6 +1,7 @@
 import 'package:amap_map/amap_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_dashcam/data/repositories/locationDio/location_dio_repository.dart';
 import 'package:my_dashcam/data/repositories/sqliteVideo/sqlite_videos_repository.dart';
 import 'package:my_dashcam/data/repositories/videoDio/video_dio_repository.dart';
@@ -47,11 +48,14 @@ class MyApp extends ConsumerStatefulWidget {
 
 class _MyAppState extends ConsumerState<MyApp> {
   bool _isAMapInitialized = false;
+  late final GoRouter _router;
+
 
   @override
   void initState() {
     super.initState();
 
+    _router = router(ref); // 只初始化一次
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_isAMapInitialized) {
         // 高德地图sdk初始化
@@ -79,7 +83,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         theme: catppuccinTheme(getCatppuccin(false)),
         themeMode: ThemeMode.system,
         darkTheme: catppuccinTheme(getCatppuccin(true)),
-        routerConfig: router(ref),
+        routerConfig: _router,
       ),
     );
   }
