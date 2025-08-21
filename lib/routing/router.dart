@@ -84,8 +84,8 @@ GoRouter router(WidgetRef ref) {
             return Scaffold(body: Center(child: Text("dirName == null")));
           }
 
-          debugPrint("dirName: $dirName");
           return VideoScreen(
+            key: ValueKey(DateTime.now().millisecondsSinceEpoch),
             viewModel: VideoViewModel(
               videoDirectoryRepository: provider.videoDirectoryRepository(),
               videoExportRepository: provider.videoExportRepository(),
