@@ -24,8 +24,16 @@ class _OnlineDirScreenState extends State<OnlineDirScreen> {
     return Scaffold(
       appBar: defaultChildAppBar(context, title: widget.deviceName),
       body: ListenableBuilder(
-        listenable: widget.viewModel,
+        listenable: Listenable.merge([
+          widget.viewModel,
+          widget.viewModel.loading.status,
+        ]),
         builder: (context, _) {
+          final loading = widget.viewModel.loading.status.value;
+          if (loading) {
+            return Center(child: CircularProgressIndicator());
+          }
+
           return DirListOnline(
             dirList: widget.viewModel.videoDirs,
             onDeleteVideoDir: (int id) =>

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:my_dashcam/routing/routes.dart';
 import 'package:my_dashcam/ui/core/themes/catppuccin.dart';
 import 'package:my_dashcam/ui/core/ui/default_child_app_bar.dart';
