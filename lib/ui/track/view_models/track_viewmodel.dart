@@ -58,6 +58,7 @@ class TrackViewModel extends ChangeNotifier {
     await loading.command(() async {
       _data = await _locationRepository.getData(name);
 
+      // 路径
       _polyline.add(
         Polyline(
           points: data.map((item) => LatLng(item.lat, item.lng)).toList(),
@@ -68,13 +69,17 @@ class TrackViewModel extends ChangeNotifier {
       final firstData = data.first;
       final lastData = data.last;
 
+      // 标记起始点/终点
       _marker.add(Marker(position: LatLng(firstData.lat, firstData.lng)));
       _marker.add(Marker(position: LatLng(lastData.lat, lastData.lng)));
 
+      // 总时长
       _totalTime = lastData.time.difference(firstData.time);
 
+      // 总路长
       _totalDistance = LatLong.calcDistance(data);
 
+      // 平均速度
       _avgSpeed =
           LatLong.avgSpeedKmH(_totalDistance, _totalTime.inSeconds.toDouble());
 

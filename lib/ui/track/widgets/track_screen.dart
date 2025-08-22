@@ -75,7 +75,7 @@ class _TrackScreenState extends State<TrackScreen> {
                   child: Card(
                     color: getCatppuccinByCtx(
                       context,
-                    ).base.withValues(alpha: 0.5),
+                    ).base.withValues(alpha: 0.8),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: 8.0,
