@@ -141,13 +141,15 @@ class _OnlineVideoScreenState extends State<OnlineVideoScreen> {
         builder: (context, _) {
           final loadingStatus = widget.viewModel.loading.status.value;
 
+          if(loadingStatus){
+            return Center(child: CircularProgressIndicator());
+          }
+
           if (widget.viewModel.videos.isEmpty) {
             return SizedBox();
           }
 
-          return loadingStatus
-              ? Center(child: CircularProgressIndicator())
-              : Column(
+          return Column(
                   children: [
                     VideoPlayBox(
                       chewieController: widget.viewModel.chewieController,
