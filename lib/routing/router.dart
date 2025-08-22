@@ -130,6 +130,7 @@ GoRouter router(WidgetRef ref) {
 
           debugPrint("dirId: $dirId");
           return OnlineVideoScreen(
+            key: ValueKey(DateTime.now().millisecondsSinceEpoch),
             viewModel: OnlineVideoViewModel(
               videoDioRepository: provider.videoDioRepository(),
               userSessionRepository: provider.userSessionRepository(),
