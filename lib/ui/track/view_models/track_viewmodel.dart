@@ -12,6 +12,7 @@ class TrackViewModel extends ChangeNotifier {
     required this.context,
     required LocationRepository locationRepository,
     required this.name,
+    this.deviceId = "",
   }) : _locationRepository = locationRepository {
     _load(name);
   }
@@ -20,6 +21,9 @@ class TrackViewModel extends ChangeNotifier {
 
   // 地理位置文件名
   final String name;
+
+  // 设备id
+  final String deviceId;
 
   final LocationRepository _locationRepository;
 
@@ -56,7 +60,8 @@ class TrackViewModel extends ChangeNotifier {
     final polylineColor = getCatppuccinByCtx(context).blue;
 
     await loading.command(() async {
-      _data = await _locationRepository.getData(name);
+      debugPrint("wuyu: $deviceId");
+      _data = await _locationRepository.getData(name, deviceId: deviceId);
 
       // 路径
       _polyline.add(
@@ -80,8 +85,10 @@ class TrackViewModel extends ChangeNotifier {
       _totalDistance = LatLong.calcDistance(data);
 
       // 平均速度
-      _avgSpeed =
-          LatLong.avgSpeedKmH(_totalDistance, _totalTime.inSeconds.toDouble());
+      _avgSpeed = LatLong.avgSpeedKmH(
+        _totalDistance,
+        _totalTime.inSeconds.toDouble(),
+      );
 
       notifyListeners();
     });

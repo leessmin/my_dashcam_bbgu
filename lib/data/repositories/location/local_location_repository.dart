@@ -7,7 +7,7 @@ class LocalLocationRepository implements LocationRepository {
   final LocationService _service = LocationService();
 
   @override
-  Future<List<LocationData>> getData(String name) async {
+  Future<List<LocationData>> getData(String name, {String? deviceId}) async {
     final content = await _service.getFileString("$name.txt");
 
     final lines = content.split("\n");

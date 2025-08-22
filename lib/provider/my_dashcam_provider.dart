@@ -49,4 +49,7 @@ class MyDashCamProvider {
 
   LocationRepository localLocationRepository() =>
       _ref.read(localLocationProvider);
+
+  LocationRepository onlineLocationRepository() =>
+      _ref.read(onlineLocationProvider);
 }

@@ -5,14 +5,13 @@ import 'package:my_dashcam/data/repositories/videoDio/video_dio_repository.dart'
 class OnlineDirViewModel extends ChangeNotifier {
   OnlineDirViewModel({
     required VideoDioRepository videoDioRepository,
-    required String deviceId,
-  }) : _videoDioRepository = videoDioRepository,
-       _deviceId = deviceId {
+    required this.deviceId,
+  }) : _videoDioRepository = videoDioRepository {
     getOnlineVideoDir(deviceId);
   }
 
   final VideoDioRepository _videoDioRepository;
-  final String _deviceId;
+  final String deviceId;
 
   List<VideoDirResponse> _videoDirs = [];
 
@@ -29,6 +28,6 @@ class OnlineDirViewModel extends ChangeNotifier {
   // 删除联网的视频目录
   Future<void> deleteOnlineVideoDir(int videoDirId) async {
     await _videoDioRepository.deleteVideoDir(videoDirId);
-    getOnlineVideoDir(_deviceId);
+    getOnlineVideoDir(deviceId);
   }
 }

@@ -11,6 +11,7 @@ abstract final class Routes {
   static const onlineVideo = "/onlineVideo";
   static const onlineDir = "/onlineDir";
   static const track = "/track";
+  static const trackOnline = "/trackOnline";
 
   // 不需要权限校验的路由列表
   static List<String> get noAuthRoutes => [Routes.login, Routes.register];
@@ -25,7 +26,10 @@ abstract final class Routes {
     required int dirId,
     required String dirName,
     required String topBarTitle,
-  }) => context.push("${Routes.onlineVideo}/$dirId/$dirName/$topBarTitle");
+    String? deviceId,
+  }) => context.push(
+    "${Routes.onlineVideo}/$dirId/$dirName/$topBarTitle?deviceId=$deviceId",
+  );
 
   static void pushOnlineDirRoute(
     BuildContext context, {
@@ -39,12 +43,14 @@ abstract final class Routes {
   static void pushTrack(
     BuildContext context, {
     required String filename,
+    String? deviceId,
     int type = 0,
   }) {
     if (type == 0) {
       context.push("${Routes.track}/$filename");
     } else if (type == 1) {
-      context.push("${Routes.track}/$filename");
+      final queryStr = deviceId == null ? "" : "?deviceId=$deviceId";
+      context.push("${Routes.trackOnline}/$filename$queryStr");
     }
   }
 }

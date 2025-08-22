@@ -14,6 +14,8 @@ class OnlineVideoViewModel extends ChangeNotifier {
     required UserSessionRepository userSessionRepository,
     required this.dirId,
     required this.topBarTitle,
+    required this.dirName,
+    this.deviceId
   }) : _videoDioRepository = videoDioRepository,
        _userSessionRepository = userSessionRepository {
     loadVideos();
@@ -22,11 +24,16 @@ class OnlineVideoViewModel extends ChangeNotifier {
   final VideoDioRepository _videoDioRepository;
   final UserSessionRepository _userSessionRepository;
 
-  // 目录名字
+  // 目录id
   final int dirId;
+
+  // 目录名字
+  final String dirName;
 
   // topBar标题
   final String topBarTitle;
+
+  final String? deviceId;
 
   List<VideoResponse> _videos = [];
 

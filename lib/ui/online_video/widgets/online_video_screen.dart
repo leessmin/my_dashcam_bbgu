@@ -116,7 +116,12 @@ class _OnlineVideoScreenState extends State<OnlineVideoScreen> {
         title: widget.viewModel.topBarTitle,
         actions: [
           IconButton(
-            onPressed: () => Routes.pushTrack(context, filename: widget.viewModel.topBarTitle),
+            onPressed: () => Routes.pushTrack(
+              context,
+              filename: widget.viewModel.dirName,
+              type: 1,
+              deviceId: widget.viewModel.deviceId,
+            ),
             icon: Icon(Icons.map_outlined),
             color: getCatppuccinByCtx(context).sky,
           ),

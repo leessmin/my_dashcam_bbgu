@@ -117,6 +117,7 @@ GoRouter router(WidgetRef ref) {
           final dirId = state.pathParameters["dirId"];
           final dirName = state.pathParameters["dirName"];
           final topBarTitle = state.pathParameters["topBarTitle"];
+          final deviceId = state.uri.queryParameters["deviceId"];
           if (dirId == null || dirName == null || topBarTitle == null) {
             return Scaffold(
               body: Center(
@@ -133,6 +134,8 @@ GoRouter router(WidgetRef ref) {
               videoDioRepository: provider.videoDioRepository(),
               userSessionRepository: provider.userSessionRepository(),
               dirId: int.parse(dirId),
+              dirName: dirName,
+              deviceId: deviceId,
               topBarTitle:
                   "$topBarTitle:${TimestampFormat.timestampToTimeString(dirName)}",
             ),
@@ -173,6 +176,24 @@ GoRouter router(WidgetRef ref) {
               context: context,
               locationRepository: provider.localLocationRepository(),
               name: filename,
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: "${Routes.trackOnline}/:filename",
+        builder: (context, state) {
+          final filename = state.pathParameters["filename"];
+          final deviceId = state.uri.queryParameters["deviceId"];
+          if (filename == null) {
+            return Scaffold(body: Center(child: Text("filename == null")));
+          }
+          return TrackScreen(
+            viewModel: TrackViewModel(
+              context: context,
+              locationRepository: provider.onlineLocationRepository(),
+              name: filename,
+              deviceId: deviceId ?? "",
             ),
           );
         },

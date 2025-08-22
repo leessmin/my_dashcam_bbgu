@@ -12,12 +12,14 @@ class DirListOnline extends StatefulWidget {
     this.scrollController,
     required this.onDeleteVideoDir,
     required this.deviceName,
+    this.deviceId,
   });
 
   final List<VideoDirResponse> dirList;
   final ScrollController? scrollController;
   final Future<void> Function(int) onDeleteVideoDir;
   final String deviceName;
+  final String? deviceId;
 
   @override
   State<DirListOnline> createState() => _DirListOnlineState();
@@ -46,6 +48,7 @@ class _DirListOnlineState extends State<DirListOnline> {
                         dirId: videoDir.id,
                         dirName: videoDir.dirName,
                         topBarTitle: widget.deviceName,
+                        deviceId: widget.deviceId,
                       );
                     },
                     child: Padding(
