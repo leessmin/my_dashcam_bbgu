@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_dashcam/ui/core/ui/video_total_card.dart';
 import 'package:my_dashcam/ui/home/view_models/video_list_viewmodel.dart';
 import 'package:my_dashcam/ui/core/ui/dir_list_online.dart';
 
@@ -75,20 +76,38 @@ class _VideoListScreenState extends State<VideoListScreen>
                 children: [
                   widget.viewModel.loading.status.value
                       ? Center(child: CircularProgressIndicator())
-                      : DirList(
-                          dirList: videoDirs,
-                          scrollController: _scrollController,
-                          onDeleteVideoDir: (String dirPath) =>
-                              widget.viewModel.deleteVideoDir(dirPath),
+                      : Column(
+                          children: [
+                            VideoTotalCard(
+                              total: videoDirs.length,
+                            ),
+                            Expanded(
+                              child: DirList(
+                                dirList: videoDirs,
+                                scrollController: _scrollController,
+                                onDeleteVideoDir: (String dirPath) =>
+                                    widget.viewModel.deleteVideoDir(dirPath),
+                              ),
+                            ),
+                          ],
                         ),
                   widget.viewModel.loading.status.value
                       ? Center(child: CircularProgressIndicator())
-                      : DirListOnline(
-                          dirList: widget.viewModel.onlineVideoDirs,
-                          scrollController: _scrollController,
-                          onDeleteVideoDir: (int id) =>
-                              widget.viewModel.deleteOnlineVideoDir(id),
-                          deviceName: "本机",
+                      : Column(
+                          children: [
+                            VideoTotalCard(
+                              total: widget.viewModel.onlineVideoDirs.length,
+                            ),
+                            Expanded(
+                              child: DirListOnline(
+                                dirList: widget.viewModel.onlineVideoDirs,
+                                scrollController: _scrollController,
+                                onDeleteVideoDir: (int id) =>
+                                    widget.viewModel.deleteOnlineVideoDir(id),
+                                deviceName: "本机",
+                              ),
+                            ),
+                          ],
                         ),
                 ],
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_dashcam/ui/core/ui/default_child_app_bar.dart';
 import 'package:my_dashcam/ui/core/ui/dir_list_online.dart';
+import 'package:my_dashcam/ui/core/ui/video_total_card.dart';
 import 'package:my_dashcam/ui/online_dir/view_models/online_dir_viewmodel.dart';
 
 class OnlineDirScreen extends StatefulWidget {
@@ -34,12 +35,19 @@ class _OnlineDirScreenState extends State<OnlineDirScreen> {
             return Center(child: CircularProgressIndicator());
           }
 
-          return DirListOnline(
-            dirList: widget.viewModel.videoDirs,
-            onDeleteVideoDir: (int id) =>
-                widget.viewModel.deleteOnlineVideoDir(id),
-            deviceName: widget.deviceName,
-            deviceId: widget.viewModel.deviceId,
+          return Column(
+            children: [
+              VideoTotalCard(total: widget.viewModel.videoDirs.length),
+              Expanded(
+                child: DirListOnline(
+                  dirList: widget.viewModel.videoDirs,
+                  onDeleteVideoDir: (int id) =>
+                      widget.viewModel.deleteOnlineVideoDir(id),
+                  deviceName: widget.deviceName,
+                  deviceId: widget.viewModel.deviceId,
+                ),
+              ),
+            ],
           );
         },
       ),
