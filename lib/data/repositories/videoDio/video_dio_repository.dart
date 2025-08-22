@@ -69,10 +69,13 @@ class VideoDioRepository {
   }
 
   // 通过目录id获取目录下的所有视频
-  Future<Response<List<VideoResponse>>> getVideos(int dirId) async {
+  Future<Response<List<VideoResponse>>> getVideos(
+    int dirId, {
+    String? deviceId,
+  }) async {
     try {
       final response = await (await authFetch)?.get(
-        "/video/list?dir_id=$dirId",
+        "/video/list?dir_id=$dirId${deviceId == null ? '' : "&device_id=$deviceId"}",
       );
 
       return Response.fromJson(

@@ -15,7 +15,7 @@ class OnlineVideoViewModel extends ChangeNotifier {
     required this.dirId,
     required this.topBarTitle,
     required this.dirName,
-    this.deviceId
+    this.deviceId,
   }) : _videoDioRepository = videoDioRepository,
        _userSessionRepository = userSessionRepository {
     loadVideos();
@@ -57,7 +57,10 @@ class OnlineVideoViewModel extends ChangeNotifier {
   // 加载视频
   Future<void> loadVideos() async {
     loading.command(() async {
-      final result = await _videoDioRepository.getVideos(dirId);
+      final result = await _videoDioRepository.getVideos(
+        dirId,
+        deviceId: deviceId == "null" ? null : deviceId,
+      );
       if (result.code != 200) {
         return;
       }
