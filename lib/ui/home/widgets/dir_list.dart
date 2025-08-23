@@ -12,11 +12,13 @@ class DirList extends StatefulWidget {
     required this.dirList,
     required this.scrollController,
     required this.onDeleteVideoDir,
+    required this.onRefresh,
   });
 
   final List<VideoDirectory> dirList;
   final ScrollController scrollController;
   final Future<void> Function(String) onDeleteVideoDir;
+  final Future<void> Function() onRefresh;
 
   @override
   State<DirList> createState() => _DirListState();
@@ -29,116 +31,121 @@ class _DirListState extends State<DirList> {
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: widget.dirList.isEmpty
           ? Center(child: Text("当前没有视频记录"))
-          : ListView.builder(
-              controller: widget.scrollController,
-              itemCount: widget.dirList.length,
-              itemBuilder: (context, index) {
-                final videoDir = widget.dirList[index];
+          : RefreshIndicator(
+            onRefresh: () async {
+              await widget.onRefresh();
+            },
+            child: ListView.builder(
+                controller: widget.scrollController,
+                itemCount: widget.dirList.length,
+                itemBuilder: (context, index) {
+                  final videoDir = widget.dirList[index];
 
-                if (videoDir.firstVideoPath == null) {
-                  return null;
-                }
+                  if (videoDir.firstVideoPath == null) {
+                    return null;
+                  }
 
-                return Card(
-                  clipBehavior: Clip.hardEdge,
-                  child: InkWell(
-                    onTap: () {
-                      Routes.pushVideoRoute(
-                        context,
-                        dirName: p.basename(videoDir.dirPath),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                TimestampFormat.timestampToTimeString(
-                                  videoDir.dirName,
+                  return Card(
+                    clipBehavior: Clip.hardEdge,
+                    child: InkWell(
+                      onTap: () {
+                        Routes.pushVideoRoute(
+                          context,
+                          dirName: p.basename(videoDir.dirPath),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  TimestampFormat.timestampToTimeString(
+                                    videoDir.dirName,
+                                  ),
+                                  style: Theme.of(context).textTheme.labelLarge,
                                 ),
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                              Text(
-                                "${videoDir.count}",
-                                style: Theme.of(context).textTheme.labelMedium,
-                              ),
-                            ],
-                          ),
-                          Divider(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8.0),
+                                Text(
+                                  "${videoDir.count}",
+                                  style: Theme.of(context).textTheme.labelMedium,
                                 ),
-                                clipBehavior: Clip.hardEdge,
-                                child: VideoThumbnailImg(
-                                  videoPath: videoDir.firstVideoPath!,
-                                  height: 72,
-                                  width: 128,
-                                  quality: 20,
+                              ],
+                            ),
+                            Divider(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  clipBehavior: Clip.hardEdge,
+                                  child: VideoThumbnailImg(
+                                    videoPath: videoDir.firstVideoPath!,
+                                    height: 72,
+                                    width: 128,
+                                    quality: 20,
+                                  ),
                                 ),
-                              ),
-                              Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            AlertDialog(
-                                              title: Text("删除"),
-                                              content: Text("您确定要删除该行车记录吗?"),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: Text("取消"),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    widget.onDeleteVideoDir(
-                                                      videoDir.dirPath,
-                                                    );
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: Text(
-                                                    "删除",
-                                                    style: TextStyle(
-                                                      color: getCatppuccinByCtx(
-                                                        context,
-                                                      ).red,
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              AlertDialog(
+                                                title: Text("删除"),
+                                                content: Text("您确定要删除该行车记录吗?"),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                    child: Text("取消"),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      widget.onDeleteVideoDir(
+                                                        videoDir.dirPath,
+                                                      );
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                    child: Text(
+                                                      "删除",
+                                                      style: TextStyle(
+                                                        color: getCatppuccinByCtx(
+                                                          context,
+                                                        ).red,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                      );
-                                    },
-                                    icon: Icon(
-                                      Icons.delete,
-                                      color: getCatppuccinByCtx(context).red,
+                                                ],
+                                              ),
+                                        );
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: getCatppuccinByCtx(context).red,
+                                      ),
                                     ),
-                                  ),
-                                  Icon(Icons.chevron_right),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
+                                    Icon(Icons.chevron_right),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
+          ),
     );
   }
 }

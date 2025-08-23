@@ -25,10 +25,10 @@ class _VideoListScreenState extends State<VideoListScreen>
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
       if (!_tabController.indexIsChanging) {
-        if(_tabController.index == 0){
+        if (_tabController.index == 0) {
           // 标签栏--本地
           widget.viewModel.getVideoDir();
-        }else if (_tabController.index == 1) {
+        } else if (_tabController.index == 1) {
           // 标签栏--在线视频，刷新在线视频
           widget.viewModel.getOnlineVideoDir();
         }
@@ -81,11 +81,12 @@ class _VideoListScreenState extends State<VideoListScreen>
                       ? Center(child: CircularProgressIndicator())
                       : Column(
                           children: [
-                            VideoTotalCard(
-                              total: videoDirs.length,
-                            ),
+                            VideoTotalCard(total: videoDirs.length),
                             Expanded(
                               child: DirList(
+                                onRefresh: () async {
+                                  await widget.viewModel.getVideoDir();
+                                },
                                 dirList: videoDirs,
                                 scrollController: _scrollController,
                                 onDeleteVideoDir: (String dirPath) =>
@@ -103,6 +104,9 @@ class _VideoListScreenState extends State<VideoListScreen>
                             ),
                             Expanded(
                               child: DirListOnline(
+                                onRefresh: () async {
+                                  await widget.viewModel.getOnlineVideoDir();
+                                },
                                 dirList: widget.viewModel.onlineVideoDirs,
                                 scrollController: _scrollController,
                                 onDeleteVideoDir: (int id) =>

@@ -8,7 +8,7 @@ class OnlineDirViewModel extends ChangeNotifier {
     required VideoDioRepository videoDioRepository,
     required this.deviceId,
   }) : _videoDioRepository = videoDioRepository {
-    getOnlineVideoDir(deviceId);
+    getOnlineVideoDir();
   }
 
   final VideoDioRepository _videoDioRepository;
@@ -20,7 +20,7 @@ class OnlineDirViewModel extends ChangeNotifier {
 
   LoadingCommand loading = LoadingCommand();
 
-  Future<void> getOnlineVideoDir(String deviceId) async {
+  Future<void> getOnlineVideoDir() async {
     loading.command(() async {
       final result = (await _videoDioRepository.getVideoDir(deviceId));
       if (result.code == 200) {
@@ -33,6 +33,6 @@ class OnlineDirViewModel extends ChangeNotifier {
   // 删除联网的视频目录
   Future<void> deleteOnlineVideoDir(int videoDirId) async {
     await _videoDioRepository.deleteVideoDir(videoDirId);
-    getOnlineVideoDir(deviceId);
+    getOnlineVideoDir();
   }
 }

@@ -44,7 +44,9 @@ class _OnlineDirScreenState extends State<OnlineDirScreen> {
                   onDeleteVideoDir: (int id) =>
                       widget.viewModel.deleteOnlineVideoDir(id),
                   deviceName: widget.deviceName,
-                  deviceId: widget.viewModel.deviceId,
+                  deviceId: widget.viewModel.deviceId, onRefresh: () async {
+                    await widget.viewModel.getOnlineVideoDir();
+                },
                 ),
               ),
             ],
