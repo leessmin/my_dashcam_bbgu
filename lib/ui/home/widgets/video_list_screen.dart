@@ -25,8 +25,11 @@ class _VideoListScreenState extends State<VideoListScreen>
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
       if (!_tabController.indexIsChanging) {
-        // 标签栏滚到在线视频，刷新在线视频
-        if (_tabController.index == 1) {
+        if(_tabController.index == 0){
+          // 标签栏--本地
+          widget.viewModel.getVideoDir();
+        }else if (_tabController.index == 1) {
+          // 标签栏--在线视频，刷新在线视频
           widget.viewModel.getOnlineVideoDir();
         }
       }
@@ -67,7 +70,7 @@ class _VideoListScreenState extends State<VideoListScreen>
               controller: _tabController,
               tabs: [
                 Tab(icon: Icon(Icons.directions_car_filled), text: "本地"),
-                Tab(icon: Icon(Icons.online_prediction), text: "在线"),
+                Tab(icon: Icon(Icons.cloud_circle), text: "云"),
               ],
             ),
             Expanded(
