@@ -113,8 +113,16 @@ class _TrackScreenState extends State<TrackScreen> {
   Widget _infoItem({required String title, required String content}) {
     return Column(
       children: [
-        Text(title, style: Theme.of(context).textTheme.titleMedium),
-        Text(content),
+        Text(
+          title,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            color: getCatppuccinByCtx(context).lavender,
+          ),
+        ),
+        Text(
+          content,
+          style: TextStyle(color: getCatppuccinByCtx(context).lavender),
+        ),
       ],
     );
   }
