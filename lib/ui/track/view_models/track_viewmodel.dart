@@ -1,4 +1,5 @@
 import 'package:amap_map/amap_map.dart';
+import 'package:coordtransform/coordtransform.dart';
 import 'package:flutter/material.dart';
 import 'package:my_dashcam/data/repositories/location/location_data.dart';
 import 'package:my_dashcam/data/repositories/location/location_repository.dart';
@@ -66,7 +67,13 @@ class TrackViewModel extends ChangeNotifier {
       // 路径
       _polyline.add(
         Polyline(
-          points: data.map((item) => LatLng(item.lat, item.lng)).toList(),
+          points: data.map((item) {
+            final latLng = CoordTransform.transformWGS84toGCJ02(
+              item.lng,
+              item.lat,
+            );
+            return LatLng(latLng.lat, latLng.lon);
+          }).toList(),
           color: polylineColor,
         ),
       );
@@ -74,9 +81,18 @@ class TrackViewModel extends ChangeNotifier {
       final firstData = data.first;
       final lastData = data.last;
 
+      final firstLatLng = CoordTransform.transformWGS84toGCJ02(
+        firstData.lng,
+        firstData.lat,
+      );
+      final lastLatLng = CoordTransform.transformWGS84toGCJ02(
+        lastData.lng,
+        lastData.lat,
+      );
+
       // 标记起始点/终点
-      _marker.add(Marker(position: LatLng(firstData.lat, firstData.lng)));
-      _marker.add(Marker(position: LatLng(lastData.lat, lastData.lng)));
+      _marker.add(Marker(position: LatLng(firstLatLng.lat, firstLatLng.lon)));
+      _marker.add(Marker(position: LatLng(lastLatLng.lat, lastLatLng.lon)));
 
       // 总时长
       _totalTime = lastData.time.difference(firstData.time);
