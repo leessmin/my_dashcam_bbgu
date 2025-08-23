@@ -16,7 +16,7 @@ class VideoTotalCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("视频总数", style: Theme.of(context).textTheme.titleMedium),
+              Text("记录总数", style: Theme.of(context).textTheme.titleMedium),
               Text("$total"),
             ],
           ),
