@@ -1,4 +1,3 @@
-import 'package:amap_map/amap_map.dart';
 import 'package:coordtransform/coordtransform.dart';
 import 'package:flutter/material.dart';
 import 'package:my_dashcam/data/repositories/location/location_data.dart';
@@ -6,7 +5,6 @@ import 'package:my_dashcam/data/repositories/location/location_repository.dart';
 import 'package:my_dashcam/ui/core/themes/catppuccin.dart';
 import 'package:my_dashcam/utils/latlong.dart';
 import 'package:my_dashcam/utils/loading_command.dart';
-import 'package:x_amap_base/x_amap_base.dart';
 
 class TrackViewModel extends ChangeNotifier {
   TrackViewModel({
@@ -35,13 +33,9 @@ class TrackViewModel extends ChangeNotifier {
 
   List<LocationData> get data => _data;
 
-  final Set<Polyline> _polyline = <Polyline>{};
+  List<List<double>> _polyline = [];
 
-  Set<Polyline> get polyline => _polyline;
-
-  final Set<Marker> _marker = <Marker>{};
-
-  Set<Marker> get marker => _marker;
+  List<List<double>> get polyline => _polyline;
 
   // 行使总时长
   Duration _totalTime = Duration();
@@ -58,41 +52,19 @@ class TrackViewModel extends ChangeNotifier {
   double get avgSpeed => _avgSpeed;
 
   Future<void> _load(String name) async {
-    final polylineColor = getCatppuccinByCtx(context).blue;
-
     await loading.command(() async {
       debugPrint("wuyu: $deviceId");
       _data = await _locationRepository.getData(name, deviceId: deviceId);
 
       // 路径
-      _polyline.add(
-        Polyline(
-          points: data.map((item) {
-            final latLng = CoordTransform.transformWGS84toGCJ02(
-              item.lng,
-              item.lat,
-            );
-            return LatLng(latLng.lat, latLng.lon);
-          }).toList(),
-          color: polylineColor,
-        ),
-      );
+      _polyline = data.map((item) {
+        // wg84坐标 转换 GCJ02
+        final latLng = CoordTransform.transformWGS84toGCJ02(item.lng, item.lat);
+        return [latLng.lon, latLng.lat];
+      }).toList();
 
       final firstData = data.first;
       final lastData = data.last;
-
-      final firstLatLng = CoordTransform.transformWGS84toGCJ02(
-        firstData.lng,
-        firstData.lat,
-      );
-      final lastLatLng = CoordTransform.transformWGS84toGCJ02(
-        lastData.lng,
-        lastData.lat,
-      );
-
-      // 标记起始点/终点
-      _marker.add(Marker(position: LatLng(firstLatLng.lat, firstLatLng.lon)));
-      _marker.add(Marker(position: LatLng(lastLatLng.lat, lastLatLng.lon)));
 
       // 总时长
       _totalTime = lastData.time.difference(firstData.time);

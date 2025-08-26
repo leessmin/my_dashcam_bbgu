@@ -1,11 +1,11 @@
-import 'package:amap_map/amap_map.dart';
 import 'package:flutter/material.dart';
 import 'package:my_dashcam/ui/core/themes/catppuccin.dart';
 import 'package:my_dashcam/ui/core/ui/default_child_app_bar.dart';
 import 'package:my_dashcam/ui/track/view_models/track_viewmodel.dart';
 import 'package:my_dashcam/utils/duration_ext.dart';
 import 'package:my_dashcam/utils/timestamp_format.dart';
-import 'package:x_amap_base/x_amap_base.dart';
+import 'package:my_dashcam/utils/webview_server.dart';
+import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
 class TrackScreen extends StatefulWidget {
   const TrackScreen({super.key, required this.viewModel});
@@ -17,10 +17,22 @@ class TrackScreen extends StatefulWidget {
 }
 
 class _TrackScreenState extends State<TrackScreen> {
+  late WebViewControllerPlus _controller;
+
+  @override
+  void initState() {
+    _controller = WebViewControllerPlus()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0xffffffff))
+      ..loadFlutterAssetWithServer(
+        "assets/webview/track.html",
+        localhostServer.port!,
+      );
+    super.initState();
+  }
+
   @override
   void dispose() {
-    _mapController?.disponse();
-    _mapController?.clearDisk();
     super.dispose();
   }
 
@@ -47,14 +59,16 @@ class _TrackScreenState extends State<TrackScreen> {
             return Center(child: Text("没有记录数据"));
           }
 
-          final AMapWidget map = AMapWidget(
-            initialCameraPosition: CameraPosition(
-              target: LatLng(data.first.lat, data.first.lng),
-              zoom: 12.0,
+          _controller.setNavigationDelegate(
+            NavigationDelegate(
+              onPageFinished: (url) {
+                debugPrint("url:::::$url");
+                debugPrint("只执行一次???${widget.viewModel.polyline}");
+                _controller.runJavaScript(
+                  "window.receiveData(${widget.viewModel.polyline})",
+                );
+              },
             ),
-            onMapCreated: onMapCreated,
-            polylines: widget.viewModel.polyline,
-            markers: widget.viewModel.marker,
           );
 
           return Stack(
@@ -64,7 +78,7 @@ class _TrackScreenState extends State<TrackScreen> {
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
-                  child: map,
+                  child: WebViewWidget(controller: _controller),
                 ),
               ),
               Positioned(
@@ -125,13 +139,5 @@ class _TrackScreenState extends State<TrackScreen> {
         ),
       ],
     );
-  }
-
-  AMapController? _mapController;
-
-  void onMapCreated(AMapController controller) {
-    setState(() {
-      _mapController = controller;
-    });
   }
 }
