@@ -2,7 +2,6 @@ import 'package:coordtransform/coordtransform.dart';
 import 'package:flutter/material.dart';
 import 'package:my_dashcam/data/repositories/location/location_data.dart';
 import 'package:my_dashcam/data/repositories/location/location_repository.dart';
-import 'package:my_dashcam/ui/core/themes/catppuccin.dart';
 import 'package:my_dashcam/utils/latlong.dart';
 import 'package:my_dashcam/utils/loading_command.dart';
 
