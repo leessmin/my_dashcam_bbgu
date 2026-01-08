@@ -227,7 +227,7 @@ class VideoList extends StatelessWidget {
     final timestamp = videoName.split(".")[0];
     return TimestampFormat.timestampToTimeString(
       timestamp,
-      format: "yyyy-MM-dd hh:mm:ss",
+      format: "yyyy-MM-dd HH:mm:ss",
     );
   }
 

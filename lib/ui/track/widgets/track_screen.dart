@@ -62,8 +62,6 @@ class _TrackScreenState extends State<TrackScreen> {
           _controller.setNavigationDelegate(
             NavigationDelegate(
               onPageFinished: (url) {
-                debugPrint("url:::::$url");
-                debugPrint("只执行一次???${widget.viewModel.polyline}");
                 _controller.runJavaScript(
                   "window.receiveData(${widget.viewModel.polyline})",
                 );
